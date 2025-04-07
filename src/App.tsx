@@ -1,4 +1,5 @@
 
+import { Outlet } from 'react-router-dom'
 import './App.css'
 
 function App() {
@@ -6,15 +7,14 @@ function App() {
 
   return (
     <>
-     <h1 className="text-3xl font-bold underline">
-    Bike Museum
-  </h1>
-  <h1 className="text-3xl font-bold ">
-    Bike Museum
-  </h1>
-  <h1 className="text-3xl font-bold ">
-    Bike Museum
-  </h1>
+  <div>
+      <div className="bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] fixed top-0 left-0 w-full min-h-screen -z-10"></div>
+
+      <div>
+       
+        <Outlet></Outlet>
+      </div>
+    </div>
   
     </>
   )
