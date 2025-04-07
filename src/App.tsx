@@ -18,12 +18,9 @@ function App() {
   <h1 className="text-3xl font-bold ">
     Bike Museum
   </h1>
-  <h1 className="text-3xl font-bold ">
-    Bike Museum
-  </h1>
-  <h1 className="text-3xl font-bold ">
-    Bike Museum
-  </h1>
+  <p>hi</p>
+  <p>hello</p>
+  
   
   
   
