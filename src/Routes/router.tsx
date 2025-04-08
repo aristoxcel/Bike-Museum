@@ -15,14 +15,10 @@ export const router = createBrowserRouter([
       {
         path: "/products",
         element: <AllProducts />,
-        loader: () =>
-          fetch("https://your-api.com/products"), // optional if you're loading with RTK
       },
       {
         path: "/products/:id",
         element: <ProductDetails />,
-        loader: ({ params }) =>
-          fetch(`https://your-api.com/products/${params.id}`),
       },
     ],
   },
