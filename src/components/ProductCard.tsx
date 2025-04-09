@@ -1,21 +1,38 @@
-import { Link } from 'react-router-dom';
-const ProductCard = () => {
-    return (
-        <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-          <img src={product.image} alt={product.name} className="h-48 w-full object-cover" />
-          <div className="p-4 space-y-1">
-            <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-sm text-gray-500">{product.brand} | {product.model}</p>
-            <p className="text-primary font-bold">${product.price}</p>
-            <Link
-              to={`/products/${product._id}`}
-              className="inline-block mt-2 text-blue-500 hover:underline text-sm"
-            >
-              View Details →
-            </Link>
-          </div>
+type Props = {
+  product: {
+    _id: string;
+    name: string;
+    brand: string;
+    price: number;
+    category: 'Mountain' | 'Road' | 'Hybrid' | 'Electric';
+    photo?: string;
+    description: string;
+    quantity: number;
+    inStock: boolean;
+    isDeleted: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+  };
+};
+
+const ProductCard = ({ product }: Props) => {
+  return (
+    <div className="card bg-base-100 shadow-xl">
+      <figure>
+        <img src={product.photo} alt={product.name} className="h-48 w-full object-cover" />
+      </figure>
+      <div className="card-body">
+        <h2 className="card-title">{product.name}</h2>
+        <p>Brand: {product.brand}</p>
+        <p>Model: {product.name}</p>
+        <p>Category: {product.category}</p>
+        <p className="font-bold text-xl text-primary">${product.price}</p>
+        <div className="card-actions justify-end">
+          <button className="btn btn-sm btn-outline">View Details</button>
         </div>
-      );
+      </div>
+    </div>
+  );
 };
 
 export default ProductCard;
