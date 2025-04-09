@@ -29,10 +29,10 @@ const AllProducts = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl text-white font-bold mb-4">All Products</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center border-b-2 mx-[20%] py-[1.5%]">All Products</h2>
 
       {/* Filter Panel */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
         <input
           className="input input-bordered w-full max-w-xs"
           placeholder="Search by name/brand/category"
@@ -73,7 +73,7 @@ const AllProducts = () => {
       ) : error ? (
         <div className="text-red-500">Error fetching products.</div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {products.length === 0 ? (
             <div className="text-center">No products found.</div>
           ) : (

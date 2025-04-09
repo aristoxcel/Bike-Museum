@@ -18,10 +18,10 @@ const Login = () => {
   } = useForm();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] px-4">
-      <div className="max-w-md w-full text-white rounded-lg shadow-lg p-8 md:p-12">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="max-w-md w-full  rounded-lg shadow-2xl shadow-black p-8 md:p-12">
         <h1 className="text-3xl font-bold text-center mb-6">Welcome Back</h1>
-        <p className="text-center text-gray-400 mb-8">
+        <p className="text-center mb-8">
           Log in to continue exploring our vast collection of books!
         </p>
         <form className="space-y-6" >
@@ -40,7 +40,7 @@ const Login = () => {
                 })}
                 type="email"
                 placeholder="Enter your email..."
-                className={`w-full px-4 py-2  text-white rounded-lg border ${
+                className={`w-full px-4 py-2   rounded-lg border ${
                   errors.email
                     ? "border-orange-500 focus:ring-orange-500"
                     : "border-gray-700 focus:ring-gray-500"
@@ -59,7 +59,7 @@ const Login = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password..."
-                  className={`w-full px-4 py-2  text-white rounded-lg border ${
+                  className={`w-full px-4 py-2   rounded-lg border ${
                     errors.password
                       ? "border-orange-500 focus:ring-orange-500"
                       : "border-gray-700 focus:ring-gray-500"
@@ -86,14 +86,14 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-sm text-white font-medium border border-orange-500 rounded-lg bg-[linear-gradient(105deg,_#f97316_4.1%,_#ea580c_54.8%,_#c2410c_92.38%)] flex items-center justify-center"
+            className="w-full myBtn flex items-center justify-center"
           >
             <p>Login</p>
           </button>
         </form>
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center mt-6">
           New Here?{" "}
-          <Link to={"/register"} className="text-orange-500 hover:underline">
+          <Link to={"/register"} className="text-blue-500 hover:underline">
             Register
           </Link>
         </p>

@@ -26,7 +26,7 @@ interface TitleProps {
 const Title: React.FC<TitleProps> = ({ text, subtitle }) => {
   return (
     <div className="flex flex-col justify-center items-center text-center w-full space-y-10">
-      <h1 className="text-orange-500 font-playFair font-bold text-2xl md:text-3xl lg:text-5xl">
+      <h1 className=" font-playFair font-bold text-2xl md:text-3xl lg:text-5xl">
         {text}
       </h1>
       {subtitle && (

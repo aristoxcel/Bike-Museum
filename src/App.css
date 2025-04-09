@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-myGradient {
+    background-image: linear-gradient(to right, #9af8f0, #3affa3);
+}
+
+.myBtn{
+    color: white;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    font-weight: 600; /* font-semibold */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+    background-image: linear-gradient(to right, #0408f7, #920423); /* bg-gradient-to-r */
+    border-radius: 0.375rem; /* rounded-md */
+    transition: background-image 0.3s ease; /* transition duration-300 */
+  }
+  
+  .myBtn:hover {
+    background-image: linear-gradient(to left, #08b9ff, #920404); /* hover:gradient */
+  }
+  
