@@ -19,7 +19,7 @@ type Props = {
 
 const ProductCard = ({ product }: Props) => {
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card bg-white p-4  shadow-xl">
       <figure>
         <img src={product.photo} alt={product.name} className="h-48 w-full object-cover" />
       </figure>
@@ -30,7 +30,7 @@ const ProductCard = ({ product }: Props) => {
         <p>Category: {product.category}</p>
         <p className="font-bold text-xl text-primary">${product.price}</p>
         <div className="card-actions justify-end">
-          <Link to={`/product/${product._id}`} className="btn btn-sm btn-outline">
+          <Link to={`/products/${product._id}`} className="btn btn-sm btn-outline rounded-2xl">
             View Details
           </Link>
         </div>
