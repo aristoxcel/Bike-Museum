@@ -1,16 +1,29 @@
+import { Link } from 'react-router-dom';
+
 const Navbar = () => {
   return (
     <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-gradient-to-r from-orange-500 to-orange-700">
+      {/* Logo */}
       <div className="text-2xl font-bold text-white">🏍️ Bike Museum</div>
+
+      {/* Navigation Links */}
       <ul className="flex gap-6">
-        <li className="text-white hover:text-gray-900">Home</li>
-        <li className="text-white hover:text-gray-900">All Products</li>
-        <li className="text-white hover:text-gray-900">Product Details Page</li>
-        <li className="text-white hover:text-gray-900">About Page</li>
+        <li>
+          <Link to="/" className="text-white hover:text-gray-900">Home</Link>
+        </li>
+        <li>
+          <Link to="/products" className="text-white hover:text-gray-900">Products</Link>
+        </li>
+        <li>
+          <Link to="/About-us" className="text-white hover:text-gray-900">About Us</Link>
+        </li>
       </ul>
+
+      {/* Login Button */}
       <div className="flex gap-4">
-        <button className="border px-4 py-1 rounded text-white hover:bg-orange-600">Login</button>
-        <button className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800">Sign Up</button>
+        <Link to="/login">
+          <button className="border px-4 py-1 rounded text-white hover:bg-orange-600">Login</button>
+        </Link>
       </div>
     </nav>
   );
