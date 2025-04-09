@@ -13,7 +13,6 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   };
   const {
-    handleSubmit,
     register,
     formState: { errors },
   } = useForm();
@@ -25,7 +24,7 @@ const Login = () => {
         <p className="text-center text-gray-400 mb-8">
           Log in to continue exploring our vast collection of books!
         </p>
-        <form className="space-y-6" onSubmit={handleSubmit()}>
+        <form className="space-y-6" >
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
@@ -43,12 +42,12 @@ const Login = () => {
                 placeholder="Enter your email..."
                 className={`w-full px-4 py-2  text-white rounded-lg border ${
                   errors.email
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-700 focus:ring-blue-500"
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
                 } focus:outline-gray-500 focus:ring-2`}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">Email is required</p>
+                <p className="text-orange-500 text-sm mt-1">Email is required</p>
               )}
             </div>
             <div>
@@ -62,8 +61,8 @@ const Login = () => {
                   placeholder="Enter your password..."
                   className={`w-full px-4 py-2  text-white rounded-lg border ${
                     errors.password
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-700 focus:ring-blue-500"
+                      ? "border-orange-500 focus:ring-orange-500"
+                      : "border-gray-700 focus:ring-gray-500"
                   } focus:outline-none focus:ring-2`}
                 />
                 <button
@@ -79,7 +78,7 @@ const Login = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-orange-500 text-sm mt-1">
                   Password is required
                 </p>
               )}
@@ -87,14 +86,14 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-sm text-white font-medium border border-[#C16EFD] rounded-lg bg-[linear-gradient(105deg,_#6384FC_4.1%,_#C16EFD_54.8%,_#6384FC_92.38%)] flex items-center justify-center"
+            className="w-full px-4 py-2 text-sm text-white font-medium border border-orange-500 rounded-lg bg-[linear-gradient(105deg,_#f97316_4.1%,_#ea580c_54.8%,_#c2410c_92.38%)] flex items-center justify-center"
           >
             <p>Login</p>
           </button>
         </form>
         <p className="text-center text-gray-400 mt-6">
           New Here?{" "}
-          <Link to={"/register"} className="text-blue-500 hover:underline">
+          <Link to={"/register"} className="text-orange-500 hover:underline">
             Register
           </Link>
         </p>
