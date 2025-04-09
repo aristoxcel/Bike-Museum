@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useGetSingleProductQuery } from '../redux/features/products/productApi';
 
 interface ProductError {
@@ -37,31 +37,34 @@ const ProductDetails = () => {
 
   // Display the product details once available
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+    <div className="container mx-auto py-20 px-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className=''>
           <img
             src={product?.photo || "https://via.placeholder.com/300"} // Fallback image if no product photo
             alt={product?.name}
-            className="w-full h-auto object-cover"
+            className="w-full shadow-[0_4px_20px_rgba(255,165,0,0.3)] h-auto object-cover "
           />
         </div>
         <div>
-          <h1 className="text-3xl font-bold">{product?.name}</h1>
-          <p className="text-xl text-gray-700">{product?.category}</p>
-          <p className="mt-2 text-gray-500">{product?.description}</p>
-          <p className="mt-4 text-2xl font-semibold text-green-600">${product?.price}</p>
-          <p className="mt-4 text-lg">Stock: {product?.quantity}</p>
+          <h1 className="text-5xl  text-orange-400 font-bold">{product?.name}</h1>
+          <p className="text-xl mt-2 text-amber-100">{product?.category}</p>
+          <p className="mt-2 text-amber-50">{product?.description}</p>
+          <p className="mt-6 text-4xl font-semibold text-red-400">${product?.price}</p>
+          <p className="mt-2 mb-4 text-amber-200 text-lg">Stock: {product?.quantity}</p>
 
-          <button
-            className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg"
-            onClick={() => {
-              // Later: dispatch add to cart
-              alert('Added to cart!');
-            }}
-          >
-            Buy Now
-          </button>
+          <div className='flex justify-between'>
+            <Link
+              to={`/products/orderForm/${product._id}`}
+              className="mt-4 px-10 py-4 border-4 text-2xl border-orange-400  text-orange-400 hover:bg-orange-400 hover:text-white font-extrabold transition-colors duration-300"
+              onClick={() => {
+                alert('Added to cart!');
+              }}
+            >
+              Buy Now
+            </Link>
+          </div>
+
         </div>
       </div>
     </div>
