@@ -1,8 +1,10 @@
 import Testimonial from "../components/HomePageComponents/Testimonial";
+import Banner from "./components/Banner";
 
 const Home = () => {
   return (
-    <div>
+    <div className="font-sans">
+      <Banner/>
       <Testimonial/>
     </div>
   );
