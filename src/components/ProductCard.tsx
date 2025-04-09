@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type Props = {
   product: {
     _id: string;
@@ -28,7 +30,9 @@ const ProductCard = ({ product }: Props) => {
         <p>Category: {product.category}</p>
         <p className="font-bold text-xl text-primary">${product.price}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-sm btn-outline">View Details</button>
+          <Link to={`/product/${product._id}`} className="btn btn-sm btn-outline">
+            View Details
+          </Link>
         </div>
       </div>
     </div>

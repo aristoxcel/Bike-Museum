@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ProductCard from '../components/ProductCard';
-import { useGetAllProductsQuery  } from '../redux/features/products/productApi';
+import { useGetAllProductsQuery } from '../redux/features/products/productApi';
 
 const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,23 +11,25 @@ const AllProducts = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
 
-  const { data, error, isLoading } = useGetAllProductsQuery ({
+  const { data, error, isLoading } = useGetAllProductsQuery({
     searchTerm,
-    category,
-    brand,
+    category: category === '' ? undefined : category,
+    brand: brand === '' ? undefined : brand,
     sortBy,
     sortOrder,
     page,
     limit,
   });
 
-  const products = data?.data || [];
-  const total = data?.meta?.total || 0;
+  console.log({ data, isLoading, error });
+  const products = data?.data ?? [];
+  const total = data?.meta?.total ?? 0;
   const totalPages = Math.ceil(total / limit);
+  console.log('Products:', products);
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">All Products</h2>
+      <h2 className="text-2xl text-white font-bold mb-4">All Products</h2>
 
       {/* Filter Panel */}
       <div className="flex flex-wrap gap-4 mb-6">
@@ -72,9 +74,13 @@ const AllProducts = () => {
         <div className="text-red-500">Error fetching products.</div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+          {products.length === 0 ? (
+            <div className="text-center">No products found.</div>
+          ) : (
+            products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          )}
         </div>
       )}
 

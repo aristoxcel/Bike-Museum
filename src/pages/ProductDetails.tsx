@@ -1,4 +1,3 @@
-
 import { useParams } from 'react-router-dom';
 import { useGetSingleProductQuery } from '../redux/features/products/productApi';
 
@@ -12,8 +11,8 @@ const ProductDetails = () => {
     error,
   } = useGetSingleProductQuery(id as string);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching product details: {(error as any)?.data?.message || 'Unknown error'}</div>;
+  if (isLoading) return <div className="flex justify-center items-center"><div>Loading...</div></div>;
+  if (isError) return <div className="text-red-500">Error fetching product details: {(error as any)?.data?.message || 'Unknown error'}</div>;
   if (!product) return <div>No product found.</div>;
 
   return (
@@ -21,7 +20,7 @@ const ProductDetails = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <img
-            src={product.photo}
+            src={product.photo || "https://via.placeholder.com/300"} // Fallback image if no product photo
             alt={product.name}
             className="w-full h-auto object-cover"
           />
