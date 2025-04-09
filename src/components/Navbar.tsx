@@ -9,23 +9,16 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleDropdown = () => {
+  const toggleDropdown = () => { 
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const user = true;
 
   return (
-    // <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-gradient-to-r from-orange-500 to-orange-700">
-    //   <div className="text-2xl font-bold text-white">🏍️ Bike Museum</div>
 
-    //   <div className="flex gap-4">
-    //     <button className="border px-4 py-1 rounded text-white hover:bg-orange-600">Login</button>
-    //     <button className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800">Sign Up</button>
-    //   </div>
-    // </nav>
 
-<nav className="flex justify-between items-center px-6 py-4 shadow-md bg-gradient-to-r from-orange-500 to-orange-700">
+<nav className="z-50 flex justify-between items-center px-6 py-4 shadow-md bg-gradient-to-r from-orange-500 to-orange-700">
   <div className="flex gap-6">
     {/* Brand */}
     <Link to="/">
@@ -37,7 +30,7 @@ const Navbar = () => {
       <Link to="/" className="text-lg text-white hover:text-gray-900">
         Home
       </Link>
-      <Link to="/all-product" className="text-lg text-white hover:text-gray-900">
+      <Link to="/products" className="text-lg text-white hover:text-gray-900">
         All Products
       </Link>
       <Link to="/about-us" className="text-lg text-white hover:text-gray-900">
@@ -114,7 +107,7 @@ const Navbar = () => {
       Home
     </Link>
     <Link
-      to="/all-product"
+      to="/products"
       className="block text-lg hover:text-[#FFD700]"
     >
       All Products
