@@ -38,12 +38,12 @@ const Register = () => {
                 placeholder="Enter your name..."
                 className={`w-full px-4 py-2  text-white rounded-lg border ${
                   errors.name
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-700 focus:ring-blue-500"
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
                 } focus:outline-none focus:ring-2`}
               />
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">Name is required</p>
+                <p className="text-orange-500 text-sm mt-1">Name is required</p>
               )}
             </div>
             <div>
@@ -62,12 +62,12 @@ const Register = () => {
                 placeholder="Enter your email..."
                 className={`w-full px-4 py-2  text-white rounded-lg border ${
                   errors.email
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-700 focus:ring-blue-500"
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
                 } focus:outline-none focus:ring-2`}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">Email is required</p>
+                <p className="text-orange-500 text-sm mt-1">Email is required</p>
               )}
             </div>
             <div>
@@ -81,8 +81,8 @@ const Register = () => {
                   placeholder="Enter your password..."
                   className={`w-full px-4 py-2  text-white rounded-lg border ${
                     errors.password
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-700 focus:ring-blue-500"
+                      ? "border-orange-500 focus:ring-orange-500"
+                      : "border-gray-700 focus:ring-gray-500"
                   } focus:outline-none focus:ring-2`}
                 />
                 <button
@@ -98,7 +98,7 @@ const Register = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-orange-500 text-sm mt-1">
                   Password is required
                 </p>
               )}
@@ -108,20 +108,20 @@ const Register = () => {
               <label className="block text-sm font-medium mb-2">Image</label>
              
               {errors.image && (
-                <p className="text-red-500 text-sm mt-1">Image is required</p>
+                <p className="text-orange-500 text-sm mt-1">Image is required</p>
               )}
             </div>
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-sm text-white font-medium border border-[#C16EFD] rounded-lg bg-[linear-gradient(105deg,_#6384FC_4.1%,_#C16EFD_54.8%,_#6384FC_92.38%)] flex items-center justify-center"
+            className="w-full px-4 py-2 text-sm text-white font-medium border border-orange-500 rounded-lg bg-[linear-gradient(105deg,_#f97316_4.1%,_#ea580c_54.8%,_#c2410c_92.38%)] flex items-center justify-center"
           >
             <p>Register</p>
           </button>
         </form>
         <p className="text-center text-gray-400 mt-6">
           Already have an account?{" "}
-          <Link to={"/login"} className="text-blue-500 hover:underline">
+          <Link to={"/login"} className="text-orange-500 hover:underline">
             Login
           </Link>
         </p>

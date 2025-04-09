@@ -5,20 +5,20 @@ import { IoLogoYoutube } from "react-icons/io";
 
 function Footer() {
   return (
-    <div className="bg-accent text-gray-300">
+    <div className=" text-gray-300">
       <div className="container mx-auto">
-        <footer className="footer p-10 ">
+        <footer className="md:flex  gap-6 p-10  items-end  justify-evenly">
           <aside className="max-w-52 ">
             <a href={"/"}>
               <img src={logo} alt="logo" height={70} width={70}/>
             </a>
-            <h4 className="font-playFair text-lg text-secondary">
-              Mohsin Law & Tax House
+            <h4 className=" text-lg text-orange-500 font-bold">
+            🏍️ Bike Museum
               <br />
-              <p className="font-roboto text-base text-gray-300">Providing reliable solution of any act since 2000</p>
+              <p className="font-roboto text-base font-medium text-gray-300">Your trusted destination for premium bikes & accessories.</p>
             </h4>
 
-            <ul className="flex gap-5">
+            <ul className="flex gap-5 mt-4">
               <a>
                 <FaSquareFacebook className="text-4xl text-sky-800 border-2 rounded-full hover:bg-secondary hover:text-5xl hover:m-0 hover:mr-1 m-2 p-2" />
               </a>
@@ -31,30 +31,36 @@ function Footer() {
             </ul>
           </aside>
 
-          <nav>
-            <h6 className="text-lg font-semibold text-secondary max-w-44 pt-10">Company</h6>
+          <nav className="flex flex-col gap-2">
+            <h6 className="text-lg font-bold text-orange-500 max-w-44 pt-10">Company</h6>
             <a className="link link-hover">About Us</a>
             <a className="link link-hover">All Products</a>
             <a className="link link-hover">Contact Us</a>
           </nav>
-          <nav>
-            <h6 className="text-lg font-semibold text-secondary max-w-44 pt-10">Services</h6>
+
+          <nav className="flex flex-col gap-2">
+            <h6 className="text-lg font-bold text-orange-500 max-w-44 pt-10">Services</h6>
             <a className="link link-hover">Parts</a>
             <a className="link link-hover">Cleaning</a>
             <a className="link link-hover">Servicing</a>
           
           </nav>
-          <nav>
-            <h6 className="text-lg font-semibold text-secondary max-w-44 pt-10 ">Newsletter</h6>
+
+          <nav className="flex flex-col gap-2">
+            <h6 className="text-lg font-bold text-orange-500 max-w-44 pt-10 ">Newsletter</h6>
             <a className="link link-hover">Terms of use</a>
             <a className="link link-hover">Privacy policy</a>
             <a className="link link-hover">Cookie policy</a>
           </nav>
+          
         </footer>
+        
+
+
         <aside className="py-12 text-center">
           <h4 className="px-3">
             Copyright &copy; 2025 All Rights Reserved | This Website is made
-            with by <span className="text-primary">Group 4</span>
+            with by <span className="text-orange-500">Bike Museum</span>
           </h4>
         </aside>
       </div>

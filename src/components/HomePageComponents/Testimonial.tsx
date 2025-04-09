@@ -61,7 +61,7 @@ export default function Testimonial() {
     <>
         <div className=''>
         <div className='my-16 py-8 z-10 relative'>
-        <Title text= 'Happy Clients' ></Title>
+        <Title text= 'Happy Clients'></Title>
         </div>
       <Swiper
         effect={'coverflow'}
@@ -97,7 +97,7 @@ export default function Testimonial() {
             delay: 2500,
             disableOnInteraction: false,
           }}
-          pagination={{ clickable: true , backgroundColor: '#da0000'}}
+          pagination={{ clickable: true , backgroundColor: '#f97316'}}
         modules={[Autoplay,EffectCoverflow, Pagination]}
         className="mySwiper relative z-60 mb-36"
       >
@@ -108,7 +108,7 @@ export default function Testimonial() {
         ))}
       </Swiper>
         </div>
-      <style tsx:true>{`
+      <style >{`
 
         .swiper-pagination-bullet {
           background-color: #d1d5db; 
@@ -116,7 +116,7 @@ export default function Testimonial() {
         }
 
         .swiper-pagination-bullet-active {
-          background-color: #da0000; 
+          background-color: #f97316; 
         }
       `}</style>
     </>

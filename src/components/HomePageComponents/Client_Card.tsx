@@ -3,7 +3,7 @@ function Client_Card({img, comment, name}) {
   return (
     <div className='mt-20 mb-8'>
     
-    <div className="relative mx-auto bg-white shadow-sm shadow-primary rounded-lg max-w-sm border-2 border-primary">
+    <div className="relative mx-auto bg-orange-100 shadow-sm shadow-primary rounded-lg max-w-sm border-2 border-primary">
    {/* Profile Image */}
    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2  rounded-full z-50 overflow-hidden shadow-lg w-32 h-32">
      <img
