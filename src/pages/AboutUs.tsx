@@ -3,29 +3,40 @@ import banner from "../assets/banner3.jpg"
 import person1 from "../assets/images/person1.png";
 import person2 from "../assets/images/person2.png";
 import person3 from "../assets/images/person3.png";
-import person4 from "../assets/images/person4.png";
+
 import { motion } from "framer-motion";
+
 
 const teamMembers = [
   {
-    name: "Rakibul Hasan",
-    role: "Founder, Bike Museum",
+    name: "Md Habib Ullah",
+    role: "Full Stack Developer",
     image: person1
   },
   {
-    name: "Samiul Islam",
-    role: "CEO, Bike Museum",
+    name: "Mehedi Hasan",
+    role: "Full Stack Developer",
     image: person2
   },
   {
-    name: "Rasel Ahmed",
-    role: "Marketing Manager",
+    name: "Rakibul Hasan",
+    role: "Full Stack Developer",
     image: person3
   },
   {
-    name: "Jannatul Ferdous",
-    role: "Customer Support",
-    image: person4
+    name: "Tahmidul Islam Tausif",
+    role: "Full Stack Developer",
+    image: person3
+  },
+  {
+    name: "Muvin Mohammad",
+    role: "Full Stack Developer",
+    image: person3
+  },
+  {
+    name: "Rajoan Bosunia",
+    role: "Full Stack Developer",
+    image: person3
   },
 ];
 
@@ -39,7 +50,7 @@ export default function Home() {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-3xl md:text-5xl font-bold text-white"
+          className="text-3xl md:text-5xl font-bold "
         >
           Welcome to Bike Museum Family
         </motion.h1>
@@ -47,7 +58,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="mt-4 text-lg md:text-xl text-gray-200"
+          className="mt-4 text-lg md:text-xl "
         >
           Your trusted destination for premium bikes & accessories.
         </motion.p>
@@ -60,15 +71,15 @@ export default function Home() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-center mb-10 text-orange-700"
+          className="text-3xl font-semibold text-center mb-10 "
         >
           Meet Our Team
         </motion.h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-6xl mx-auto">
+        <div className="grid  md:grid-cols-2 lg:grid-cols-4 gap-10">
           {teamMembers.map((member, idx) => (
-            <motion.div
-              key={idx}
+           <div key={idx}>
+             <motion.div
               whileHover={{ scale: 1.05 }}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -82,20 +93,21 @@ export default function Home() {
                 className="w-24 md:w-28 lg:w-36 h-24 md:h-28 lg:h-36 rounded-full mx-auto object-top border-2 border-white mb-4"
               />
               <h3 className="text-xl font-semibold">{member.name}</h3>
-              <p className="text-sm text-gray-300">{member.role}</p>
+              <p className="text-sm ">{member.role}</p>
             </motion.div>
+           </div>
           ))}
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 px-4 w-full bg-gradient-to-t from-gray-800 to-gray-900">
+      <section className="py-16 px-4 w-full ">
         <motion.h2
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-center mb-10 text-orange-500"
+          className="text-3xl font-semibold text-center mb-10 "
         >
           Contact Us
         </motion.h2>
@@ -105,22 +117,22 @@ export default function Home() {
             <input
               type="text"
               placeholder="Your Name"
-              className="p-3 rounded bg-gray-700 text-white w-full"
+              className="p-3 rounded border-1 border-blue-400 w-full"
             />
             <input
               type="email"
               placeholder="Your Email"
-              className="p-3 rounded bg-gray-700 text-white w-full "
+              className="p-3 rounded border-1 border-blue-400 w-full "
             />
           </div>
           <textarea
             placeholder="Your Message"
             rows={5}
-            className="p-3 rounded bg-gray-700 text-white w-full"
+            className="p-3 rounded border-1 border-blue-400 w-full"
           ></textarea>
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-700 transition-colors text-white px-6 py-3 rounded"
+            className="myBtn"
           >
             Send Message
           </button>
