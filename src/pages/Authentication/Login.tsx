@@ -13,7 +13,6 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   };
   const {
-    handleSubmit,
     register,
     formState: { errors },
   } = useForm();
@@ -25,7 +24,7 @@ const Login = () => {
         <p className="text-center text-gray-400 mb-8">
           Log in to continue exploring our vast collection of books!
         </p>
-        <form className="space-y-6" onSubmit={handleSubmit()}>
+        <form className="space-y-6" >
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
