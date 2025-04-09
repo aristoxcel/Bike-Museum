@@ -1,16 +1,11 @@
-import Navbar from '../pages/components/Navbar';
-import Banner from '../pages/components/Banner';
-
-import Testimonials from '../pages/components/Testimonials';
-import Footer from '../pages/components/Footer';
+import Testimonial from "../components/HomePageComponents/Testimonial";
+import Banner from "./components/Banner";
 
 const Home = () => {
   return (
-    <div className="bg-white text-black font-sans">
-      <Navbar />
-      <Banner />
-      <Testimonials />
-      <Footer />
+    <div className="font-sans">
+      <Banner/>
+      <Testimonial/>
     </div>
   );
 };
