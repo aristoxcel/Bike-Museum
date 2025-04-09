@@ -37,17 +37,18 @@ const ProductDetails = () => {
 
   // Display the product details once available
   return (
-    <div className="container mx-auto py-20 px-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className=''>
+    <div className="container mx-auto pt-10 pb-20 px-10 lg:px-32">
+      <h1 className='text-5xl font-bold text-orange-400 text-center my-10'>Product Details</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 shadow-[0_4px_20px_rgba(255,165,0,0.3)]   pb-12 rounded-4xl">
+        <div className='w-full'>
           <img
             src={product?.photo || "https://via.placeholder.com/300"} // Fallback image if no product photo
             alt={product?.name}
-            className="w-full shadow-[0_4px_20px_rgba(255,165,0,0.3)] h-auto object-cover "
+            className="w-full rounded-t-3xl h-auto object-cover "
           />
         </div>
-        <div>
-          <h1 className="text-5xl  text-orange-400 font-bold">{product?.name}</h1>
+        <div className='px-8'>
+          <h1 className="text-3xl md:text-5xl  text-orange-400 font-bold">{product?.name}</h1>
           <p className="text-xl mt-2 text-amber-100">{product?.category}</p>
           <p className="mt-2 text-amber-50">{product?.description}</p>
           <p className="mt-6 text-4xl font-semibold text-red-400">${product?.price}</p>
