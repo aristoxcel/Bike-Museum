@@ -1,5 +1,5 @@
 import Testimonial from "../components/HomePageComponents/Testimonial";
-import Banner from "./components/Banner";
+import Banner from "../components/HomePageComponents/Banner";
 
 const Home = () => {
   return (
