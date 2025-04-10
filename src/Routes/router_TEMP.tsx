@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import AllProducts from "../pages/AllProducts";
 import Login from "../pages/Authentication/Login";
 import Register from "../pages/Authentication/Register";
+import AboutUs from "../pages/AboutUs"
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/products/:id",
         element: <ProductDetails/>,
+      },
+      {
+        path: "/about-us",
+        element: <AboutUs/>,
       },
       {
         path: "/login",
