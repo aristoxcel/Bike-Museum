@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // To navigate to the all products page
+import { Link} from 'react-router-dom'; // To navigate to the all products page
 import { useGetAllProductsQuery } from '../../redux/features/products/productApi'; // Assuming RTK Query
 import ProductCard from '../ProductCard'; // Assuming you have a ProductCard component
+import { TProduct } from '../../redux/types/product';
 
 const FeatureSection = () => {
-  const navigate = useNavigate();
-  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<TProduct[]>([]);
+
 
   // Fetch all products from the API
   const { data, isLoading, error } = useGetAllProductsQuery({});
