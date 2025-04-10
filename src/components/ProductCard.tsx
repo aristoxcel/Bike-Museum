@@ -19,6 +19,7 @@ type Props = {
 
 const ProductCard = ({ product }: Props) => {
   return (
+
     <div className="rounded-xl px-[2%] py-[3%] shadow-xl">
       <figure>
         <img
