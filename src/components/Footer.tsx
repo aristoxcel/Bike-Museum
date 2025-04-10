@@ -1,5 +1,4 @@
-
-import logo from "../../public/vite.svg";
+import logo from '../assets/logs.png'
 import { FaSquareFacebook, FaTwitter } from "react-icons/fa6";
 import { IoLogoYoutube } from "react-icons/io";
 
@@ -10,10 +9,10 @@ function Footer() {
         <footer className="md:flex  gap-6 p-10  items-end  justify-evenly">
           <aside className="max-w-52 ">
             <a href={"/"}>
-              <img src={logo} alt="logo" height={70} width={70}/>
+              <img src={logo} alt="logo" height={90} width={150}/>
             </a>
-            <h4 className=" text-lg text-orange-500 font-bold">
-            🏍️ Bike Museum
+            <h4 className=" text-lg text-orange-200 font-bold">
+             Bike Museum Co. Ltd.
               <br />
               <p className="font-roboto text-base font-medium text-gray-300">Your trusted destination for premium bikes & accessories.</p>
             </h4>

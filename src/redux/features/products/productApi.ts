@@ -25,7 +25,7 @@ export const productApi = baseApi.injectEndpoints({
 
     getSingleProduct: builder.query<TProductResponse, string>({
       query: (id) => `/products/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Product', id }],
+      providesTags: (result, error, id) => [{ type: 'Product', id , result, error}],
     }),
   }),
 });

@@ -60,7 +60,7 @@ export default function Home() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-center mb-10 text-orange-700"
+          className="text-3xl font-semibold text-center mb-10 text-orange-500"
         >
           Meet Our Team
         </motion.h2>
