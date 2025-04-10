@@ -4,12 +4,11 @@ import {
   TProductsResponse,
 } from '../../types/product';
 
-// Define the type for the parameters expected in the query
 export type GetAllProductsParams = {
   page?: number;
   limit?: number;
   category?: 'Mountain' | 'Road' | 'Hybrid' | 'Electric';
-  // Add any other query parameters your API expects
+ 
 };
 
 export const productApi = baseApi.injectEndpoints({
@@ -18,7 +17,7 @@ export const productApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: '/products',
         method: 'GET',
-        params, // Use the defined type for params
+        params, 
       }),
       providesTags: ['Product'],
     }),
