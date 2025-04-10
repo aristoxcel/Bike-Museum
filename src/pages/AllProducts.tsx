@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import ProductCard from '../components/ProductCard';
 import { useGetAllProductsQuery } from '../redux/features/products/productApi';
+import { TProduct } from '../redux/types/product';
 
 const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [brand, setBrand] = useState('');
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState<keyof TProduct | ''>(''); // Allow empty string initially
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(1);
   const limit = 6;
@@ -42,8 +43,15 @@ const AllProducts = () => {
         const aValue = a[sortBy];
         const bValue = b[sortBy];
 
-        if (sortOrder === 'asc') return aValue > bValue ? 1 : -1;
-        return aValue < bValue ? 1 : -1;
+        // Ensure aValue and bValue are not undefined before comparing
+        if (aValue === undefined) return 1; // Treat undefined as larger if in ascending order
+        if (bValue === undefined) return -1; // Treat undefined as smaller if in ascending order
+
+        if (sortOrder === 'asc') {
+          return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+        } else {
+          return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+        }
       });
     }
 
@@ -98,10 +106,12 @@ const AllProducts = () => {
           <option value="Suzuki">Suzuki</option>
         </select>
 
-        <select className="select text-orange-400" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <select className="select text-orange-400" value={sortBy} onChange={(e) => setSortBy(e.target.value as keyof TProduct)}>
           <option value="">Sort By</option>
           <option value="price">Price</option>
-          <option value="model">Model</option>
+          <option value="name">Name</option> {/* Corrected the field name */}
+          <option value="category">Category</option>
+          {/* Add other properties of TProduct here */}
         </select>
 
         <select className="select text-orange-400" value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}>

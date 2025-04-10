@@ -9,3 +9,7 @@ export const baseApi = createApi({
   tagTypes: ['Product'],
   endpoints: () => ({}),
 });
+
+
+//  http://localhost:5000/api
+//  https://bike-museum-server.vercel.app/api
