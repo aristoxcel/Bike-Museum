@@ -24,7 +24,7 @@ const ProductDetails = () => {
   console.log("Error:", error);
 
   // Show loading state
-  if (isLoading) return <div className="flex justify-center items-center">Loading...</div>;
+  if (isLoading) return <div className="flex justify-center items-center text-orange-400">Loading...</div>;
 
   // Show error message if there is an issue fetching the product
   if (isError) {
@@ -37,24 +37,24 @@ const ProductDetails = () => {
 
   // Display the product details once available
   return (
-    <div className="container mx-auto pt-10 pb-20 px-10 lg:px-32">
+    <div className="container mx-auto py-10  px-10 lg:px-32">
       <h1 className='text-5xl font-bold text-orange-400 text-center my-10'>Product Details</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 shadow-[0_4px_20px_rgba(255,165,0,0.3)]   pb-12 rounded-4xl">
-        <div className='w-full'>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 shadow-[0_4px_20px_rgba(255,165,0,0.3)] rounded-4xl">
+        <div className='w-full max-h-fit'>
           <img
-            src={product?.photo || "https://via.placeholder.com/300"} // Fallback image if no product photo
+            src={product?.photo || "https://via.placeholder.com/300"} 
             alt={product?.name}
-            className="w-full rounded-t-3xl h-auto object-cover "
+            className="w-full rounded-t-3xl lg:rounded-t-none lg:rounded-l-3xl h-full object-cover "
           />
         </div>
-        <div className='px-8'>
+        <div className='px-8 py-8'>
           <h1 className="text-3xl md:text-5xl  text-orange-400 font-bold">{product?.name}</h1>
           <p className="text-xl mt-2 text-amber-100">{product?.category}</p>
           <p className="mt-2 text-amber-50">{product?.description}</p>
           <p className="mt-6 text-4xl font-semibold text-red-400">${product?.price}</p>
           <p className="mt-2 mb-4 text-amber-200 text-lg">Stock: {product?.quantity}</p>
 
-          <div className='flex justify-between'>
+          <div className='flex mt-8 md:mt-0 justify-between'>
             <Link
               to={`/products/orderForm/${product._id}`}
               className="mt-4 px-10 py-4 border-4 text-2xl border-orange-400  text-orange-400 hover:bg-orange-400 hover:text-white font-extrabold transition-colors duration-300"
