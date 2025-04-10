@@ -1,7 +1,8 @@
 import Testimonial from "../components/HomePageComponents/Testimonial";
 import Banner from "../components/HomePageComponents/Banner";
-import Marquee from "react-fast-marquee";
 
+import Marquee from "react-fast-marquee";
+import FeatureSection from "../components/HomePageComponents/FeaturedProducts";
 import h1 from "../assets/images/h1.png";
 import h2 from "../assets/images/h2.png";
 import h3 from "../assets/images/h3.png";
@@ -16,9 +17,12 @@ import h11 from "../assets/images/h11.png";
 import h12 from "../assets/images/h12.png";
 import explore from "../assets/images/explore.png"; // 
 
+
+
 const Home = () => {
   return (
     <div className="font-sans">
+
       {/* Banner Section */}
       <Banner />
 
@@ -61,9 +65,12 @@ const Home = () => {
           />
         </div>
       </div>
+        <FeatureSection/>
 
       {/* Testimonials */}
       <Testimonial />
+
+
     </div>
   );
 };
