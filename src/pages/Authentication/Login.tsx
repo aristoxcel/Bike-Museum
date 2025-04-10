@@ -1,21 +1,60 @@
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../redux/features/auth/authApi";
+import { toast } from "sonner";
+import { useAppDispatch } from "../../redux/hooks";
+import { verifyToken } from "../../redux/utils/verifyToken";
+import { setUser, TUser } from "../../redux/features/auth/authSlice";
 
 
 
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-  const {
+
+   const {
+    handleSubmit,
     register,
     formState: { errors },
   } = useForm();
+
+
+  const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    // console.log(data);
+    // const toastId = toast.loading("Please wait...");
+    try {
+      const result = await login(data).unwrap();
+      console.log("Login : ", result);
+
+      const user = verifyToken(result.data.accessToken) as TUser;
+      // console.log("user => ,", user);
+      if (result?.success) {
+        toast.success("Login Successfully..", {
+          // id: toastId,
+          duration: 2000,
+        });
+      }
+      dispatch(setUser({ user: user, token: result.data.accessToken }));
+      navigate("/");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error:any) {
+      console.log("error =>", error);
+      toast.error(error.data.message, { duration: 2000 });
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -24,7 +63,7 @@ const Login = () => {
         <p className="text-center mb-8">
           Log in to continue exploring our vast collection of books!
         </p>
-        <form className="space-y-6" >
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">

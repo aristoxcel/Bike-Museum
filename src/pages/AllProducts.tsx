@@ -1,31 +1,66 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import ProductCard from '../components/ProductCard';
 import { useGetAllProductsQuery } from '../redux/features/products/productApi';
+import { TProduct } from '../redux/types/product';
 
 const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [brand, setBrand] = useState('');
-  const [sortBy, setSortBy] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortBy, setSortBy] = useState<keyof TProduct | ''>(''); // Allow empty string initially
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(1);
-  const [limit] = useState(6);
+  const limit = 6;
 
-  const { data, error, isLoading } = useGetAllProductsQuery({
-    searchTerm,
-    category: category === '' ? undefined : category,
-    brand: brand === '' ? undefined : brand,
-    sortBy,
-    sortOrder,
-    page,
-    limit,
-  });
+  const { data, isLoading, error } = useGetAllProductsQuery({});
 
-  console.log({ data, isLoading, error });
-  const products = data?.data ?? [];
-  const total = data?.meta?.total ?? 0;
+  const allProducts = useMemo(() => {
+    if (!data?.data) return [];
+
+    let filtered = [...data.data];
+
+    // Search
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        [product.name, product.brand, product.category]
+          .some(field => field?.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    // Category filter
+    if (category) {
+      filtered = filtered.filter(product => product.category === category);
+    }
+
+    // Brand filter
+    if (brand) {
+      filtered = filtered.filter(product => product.brand === brand);
+    }
+
+    // Sort
+    if (sortBy) {
+      filtered.sort((a, b) => {
+        const aValue = a[sortBy];
+        const bValue = b[sortBy];
+
+        // Ensure aValue and bValue are not undefined before comparing
+        if (aValue === undefined) return 1; // Treat undefined as larger if in ascending order
+        if (bValue === undefined) return -1; // Treat undefined as smaller if in ascending order
+
+        if (sortOrder === 'asc') {
+          return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+        } else {
+          return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+        }
+      });
+    }
+
+    return filtered;
+  }, [data, searchTerm, category, brand, sortBy, sortOrder]);
+
+  const total = allProducts.length;
   const totalPages = Math.ceil(total / limit);
-  console.log('Products:', products);
+  const paginatedProducts = allProducts.slice((page - 1) * limit, page * limit);
 
   return (
     <div className="p-6">
@@ -34,13 +69,19 @@ const AllProducts = () => {
       {/* Filter Panel */}
       <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
         <input
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered  w-full max-w-xs"
           placeholder="Search by name/brand/category"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setPage(1);
+          }}
         />
 
-        <select className="select" value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select className="select " value={category} onChange={(e) => {
+          setCategory(e.target.value);
+          setPage(1);
+        }}>
           <option value="">All Categories</option>
           <option value="Mountain">Mountain</option>
           <option value="Road">Road</option>
@@ -48,22 +89,34 @@ const AllProducts = () => {
           <option value="Electric">Electric</option>
         </select>
 
-        <select className="select" value={brand} onChange={(e) => setBrand(e.target.value)}>
+        <select className="select " value={brand} onChange={(e) => {
+          setBrand(e.target.value);
+          setPage(1);
+        }}>
           <option value="">All Brands</option>
+          <option value="Trek">Trek</option>
+          <option value="Specialized">Specialized</option>
+          <option value="Cannondale">Cannondale</option>
+          <option value="Rad Power Bikes">Rad Power Bikes</option>
+          <option value="Aventon">Aventon</option>
+          <option value="Turboant">Turboant</option>
+          <option value="Juiced Bikes">Juiced Bikes</option>
           <option value="Yamaha">Yamaha</option>
-          <option value="Honda">Honda</option>
+          <option value="Hero">Hero</option>
           <option value="Suzuki">Suzuki</option>
         </select>
 
-        <select className="select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <select className="select " value={sortBy} onChange={(e) => setSortBy(e.target.value as keyof TProduct)}>
           <option value="">Sort By</option>
           <option value="price">Price</option>
-          <option value="model">Model</option>
+          <option value="name">Name</option> {/* Corrected the field name */}
+          <option value="category">Category</option>
+          {/* Add other properties of TProduct here */}
         </select>
 
-        <select className="select" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="asc">Asc</option>
-          <option value="desc">Desc</option>
+        <select className="select " value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}>
+          <option value="asc">Lowest</option>
+          <option value="desc">Highest</option>
         </select>
       </div>
 
@@ -71,13 +124,13 @@ const AllProducts = () => {
       {isLoading ? (
         <div className="text-center">Loading...</div>
       ) : error ? (
-        <div className="text-red-500">Error fetching products.</div>
+        <div className="">Error fetching products.</div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {products.length === 0 ? (
+          {products?.length === 0 ? (
             <div className="text-center">No products found.</div>
           ) : (
-            products.map((product) => (
+            paginatedProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))
           )}
@@ -86,15 +139,34 @@ const AllProducts = () => {
 
       {/* Pagination */}
       <div className="flex justify-center mt-6">
+        {/* Previous Button */}
+        <button
+          className={`btn btn-sm text-2xl  mx-2 ${page === 1 ? 'btn-disabled' : 'btn-outline'}`}
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+        >
+          Prev
+        </button>
+
+        {/* Page Number Buttons */}
         {[...Array(totalPages)].map((_, idx) => (
           <button
             key={idx}
-            className={`btn btn-sm mx-1 ${page === idx + 1 ? 'btn-primary' : 'btn-outline'}`}
+            className={`btn btn-sm text-xl  mx-2  ${page === idx + 1 ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setPage(idx + 1)}
           >
             {idx + 1}
           </button>
         ))}
+
+        {/* Next Button */}
+        <button
+          className={`btn btn-sm text-2xl  mx-2  ${page === totalPages ? 'btn-disabled' : 'btn-outline'}`}
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
