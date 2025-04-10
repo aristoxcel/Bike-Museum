@@ -27,7 +27,7 @@ const Home = () => {
       <Banner />
 
       {/* Marquee with bike images */}
-      <div className="bg-orange-100 py-6 my-6">
+      <div className="py-6 my-6">
         <Marquee gradient={false} speed={40}>
           <img src={h1} alt="Bike 1" className="h-32 mx-4 rounded shadow-md" />
           <img src={h2} alt="Bike 2" className="h-32 mx-4 rounded shadow-md" />
@@ -45,15 +45,26 @@ const Home = () => {
       </div>
 
       {/* Special Services Section with larger text and image */}
-      <div className="flex flex-col-1 lg:flex-row items-center justify-between px-10 py-20 bg-white gap-16">
+      <div className="bg-orange-50 ">
+      <div className="flex flex-col-1 lg:flex-row items-center justify-between px-10 py-26 gap-16 container mx-auto ">
         {/* Left Side - Large Text */}
         <div className="lg:w-1/2 text-center lg:text-left">
-          <h2 className="text-6xl font-extrabold text-orange-600 mb-8">
-            Check out our special services
+        <h4 className="text-xl md:text-2xl font-medium text-orange-500 mb-4 md:mb-5 lg:mb-8 capitalize">
+            Explore New Bikes -
+          </h4>
+          <h2 className="text-3xl lg:text-5xl font-extrabold text-orange-600 mb-4 md:mb-5 lg:mb-8 capitalize">
+            Check out our latest collection & special services
           </h2>
-          <p className="text-3xl text-gray-700 leading-relaxed">
+          
+          <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-4 md:mb-5 lg:mb-8">
             Explore exclusive services that cater to vintage and modern bikes, from restoration to customization.
           </p>
+          <button
+            type="submit"
+            className="bg-orange-500 hover:bg-orange-700 font-semibold transition-colors text-white px-6 py-3 rounded"
+          >
+            Book Now
+          </button>
         </div>
 
         {/* Right Side - Large Image */}
@@ -64,6 +75,7 @@ const Home = () => {
             className="rounded-2xl shadow-xl w-full max-w-4xl"  // Increased max width to make the image larger
           />
         </div>
+      </div>
       </div>
         <FeatureSection/>
 

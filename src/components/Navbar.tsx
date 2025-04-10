@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
+import logo from '../assets/logos.png'
 
 const Navbar = () => {
   return (
     <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-gradient-to-r from-orange-500 to-orange-700">
       {/* Logo */}
-      <div className="text-2xl font-bold text-white">🏍️ Bike Museum</div>
+      <Link to="/" className=""><img className='h-[50px]' src={logo} alt="" /></Link>
 
       {/* Navigation Links */}
       <ul className="flex gap-6">
@@ -12,7 +13,7 @@ const Navbar = () => {
           <Link to="/" className="text-white hover:text-gray-900">Home</Link>
         </li>
         <li>
-          <Link to="/products" className="text-white hover:text-gray-900">Products</Link>
+          <Link to="/products" className="text-white hover:text-gray-900">All Products</Link>
         </li>
         <li>
           <Link to="/about-us" className="text-white hover:text-gray-900">About Us</Link>
