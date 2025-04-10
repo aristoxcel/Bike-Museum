@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import './App.css'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar';
+import { Toaster } from 'sonner';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
 
       <div>
         <Navbar></Navbar>
+        <Toaster/>
         <Outlet></Outlet>
         <Footer/>
       </div>
