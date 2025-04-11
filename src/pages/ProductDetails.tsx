@@ -1,48 +1,71 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useGetSingleProductQuery } from '../redux/features/products/productApi';
+
+interface ProductError {
+  data: {
+    message: string;
+  };
+}
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
 
-  const {
-    data: product,
-    isLoading,
-    isError,
-    error,
-  } = useGetSingleProductQuery(id as string);
+  console.log("Product ID:", id);
 
-  if (isLoading) return <div className="flex justify-center items-center"><div>Loading...</div></div>;
-  if (isError) return <div className="text-red-500">Error fetching product details: {(error as any)?.data?.message || 'Unknown error'}</div>;
+  // Fetch product details using the id
+  const { data: response, isLoading, isError, error } = useGetSingleProductQuery(id!);
+
+  // Extract product data from the response
+  const product = response?.data;
+
+  // Debugging logs
+  console.log("Product Data:", product);
+  console.log("Loading:", isLoading);
+  console.log("Error:", error);
+
+  // Show loading state
+  if (isLoading) return <div className="flex justify-center items-center text-orange-400">Loading...</div>;
+
+  // Show error message if there is an issue fetching the product
+  if (isError) {
+    const errorMessage = (error as ProductError)?.data?.message || 'Unknown error';
+    return <div className="text-red-500">Error fetching product details: {errorMessage}</div>;
+  }
+
+  // If no product data is available, show a message
   if (!product) return <div>No product found.</div>;
 
+  // Display the product details once available
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+    <div className="container mx-auto py-10  px-10 lg:px-32">
+      <h1 className='text-5xl font-bold text-orange-400 text-center my-10'>Product Details</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 shadow-[0_4px_20px_rgba(255,165,0,0.3)] rounded-4xl">
+        <div className='w-full max-h-fit'>
           <img
-            src={product.photo || "https://via.placeholder.com/300"} // Fallback image if no product photo
-            alt={product.name}
-            className="w-full h-auto object-cover"
+            src={product?.photo || "https://via.placeholder.com/300"} 
+            alt={product?.name}
+            className="w-full rounded-t-3xl lg:rounded-t-none lg:rounded-l-3xl h-full object-cover "
           />
         </div>
-        <div>
-          <h1 className="text-3xl font-bold">{product.name}</h1>
-          <p className="text-xl text-gray-700">{product.category}</p>
-          <p className="mt-2 text-gray-500">{product.description}</p>
-          <p className="mt-4 text-2xl font-semibold text-green-600">
-            ${product.price}
-          </p>
-          <p className="mt-4 text-lg">Stock: {product.quantity}</p>
+        <div className='px-8 py-8'>
+          <h1 className="text-3xl md:text-5xl  text-orange-400 font-bold">{product?.name}</h1>
+          <p className="text-xl mt-2 text-amber-100">{product?.category}</p>
+          <p className="mt-2 text-amber-50">{product?.description}</p>
+          <p className="mt-6 text-4xl font-semibold text-red-400">${product?.price}</p>
+          <p className="mt-2 mb-4 text-amber-200 text-lg">Stock: {product?.quantity}</p>
 
-          <button
-            className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg"
-            onClick={() => {
-              // Later: dispatch add to cart
-              alert('Added to cart!');
-            }}
-          >
-            Add to Cart
-          </button>
+          <div className='flex mt-8 md:mt-0 justify-between'>
+            <Link
+              to={`/products/orderForm/${product._id}`}
+              className="mt-4 px-10 py-4 border-4 text-2xl border-orange-400  text-orange-400 hover:bg-orange-400 hover:text-white font-extrabold transition-colors duration-300"
+              onClick={() => {
+                alert('Added to cart!');
+              }}
+            >
+              Buy Now
+            </Link>
+          </div>
+
         </div>
       </div>
     </div>

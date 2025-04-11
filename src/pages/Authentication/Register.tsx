@@ -1,22 +1,83 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+import { RingLoader } from "react-spinners";
+import axios from "axios";
+import { useRegisterMutation } from "../../redux/features/auth/authApi";
 
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
   const {
+    handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset,
   } = useForm();
+
+  const [registerUser] = useRegisterMutation();
+
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    // const toastId = toast.loading("Please wait...");
+    try {
+      setLoading(true);
+      const image = data.image[0];
+      const newFormData = new FormData();
+      newFormData.append("file", image); // Add the image file
+      newFormData.append("upload_preset", "humayunkabir"); // Your upload preset
+      newFormData.append("cloud_name", "dn7oeugls"); // Not necessary for the request
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dn7oeugls/image/upload",
+        newFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const imageUrl = response.data.url;
+      const userInfo = {
+        ...data,
+        imageUrl,
+      };
+      // console.log(data);
+      const result = await registerUser(userInfo).unwrap();
+      console.log("result => ", result);
+      if (result?.success) {
+        toast.success("Registration Successfully..", {
+          // id: toastId,
+          duration: 2000,
+        });
+        reset();
+        setLoading(false);
+        navigate("/login");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log("error =>", error);
+      toast.error(error.data.message, { duration: 2000 });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#F97316] via-[#EA580C] to-[#C2410C] px-4">
+        <RingLoader size={80} color="#1ca944" />
+      </div>
+    );
+  }
 
 
   return (
@@ -26,7 +87,7 @@ const Register = () => {
         <p className="text-center text-gray-400 mb-8">
           Unlock access to a wide range of books with just a few details!
         </p>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
@@ -106,7 +167,20 @@ const Register = () => {
 
             <div>
               <label className="block text-sm font-medium mb-2">Image</label>
-             
+              {loading ? (
+                <p>Uploading, please wait...</p>
+              ) : (
+                <input
+                  {...register("image", { required: "Image is required" })}
+                  type="file"
+                  accept="image/*"
+                  className={`w-full px-4 py-2 text-white rounded-lg  border ${
+                    errors.image
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-700 focus:ring-blue-500"
+                  } focus:outline-none focus:ring-2`}
+                />
+              )}
               {errors.image && (
                 <p className="text-orange-500 text-sm mt-1">Image is required</p>
               )}
