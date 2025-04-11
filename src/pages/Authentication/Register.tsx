@@ -34,11 +34,11 @@ const Register = () => {
       const image = data.image[0];
       const newFormData = new FormData();
       newFormData.append("file", image); // Add the image file
-      newFormData.append("upload_preset", "humayunkabir"); // Your upload preset
-      newFormData.append("cloud_name", "dn7oeugls"); // Not necessary for the request
+      newFormData.append("upload_preset", "rakib001"); // Your upload preset
+      newFormData.append("cloud_name", "dtrek2mmx"); // Not necessary for the request
 
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dn7oeugls/image/upload",
+        "https://api.cloudinary.com/v1_1/dtrek2mmx/image/upload",
         newFormData,
         {
           headers: {
@@ -73,8 +73,8 @@ const Register = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#F97316] via-[#EA580C] to-[#C2410C] px-4">
-        <RingLoader size={80} color="#1ca944" />
+      <div className="flex items-center justify-center min-h-screen  px-4">
+        <RingLoader size={80} color="#C2410C" />
       </div>
     );
   }
