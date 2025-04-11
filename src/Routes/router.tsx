@@ -6,6 +6,8 @@ import Home from "../pages/Home";
 import AllProducts from "../pages/AllProducts";
 import Login from "../pages/Authentication/Login";
 import Register from "../pages/Authentication/Register";
+import OrderForm from "../pages/OrderForm/OrderForm";
+
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ export const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      {
+        path: "/product/orderForm/:id",
+        element: <OrderForm />,
+      }
     ],
   },
 ]);
