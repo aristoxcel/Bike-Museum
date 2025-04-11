@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link} from 'react-router-dom'; // To navigate to the all products page
-import { useGetAllProductsQuery } from '../../redux/features/products/productApi'; // Assuming RTK Query
-import ProductCard from '../ProductCard'; // Assuming you have a ProductCard component
+import { Link} from 'react-router-dom'; 
+import { useGetAllProductsQuery } from '../../redux/features/products/productApi'; 
+import ProductCard from '../ProductCard'; 
 import { TProduct } from '../../redux/types/product';
 
 const FeatureSection = () => {
   const [featuredProducts, setFeaturedProducts] = useState<TProduct[]>([]);
 
 
-  // Fetch all products from the API
+  // Fetched all products from the API
   const { data, isLoading, error } = useGetAllProductsQuery({});
 
-  // Update the featured products once data is fetched
+  // Update the featured products with desired number of data 
   useEffect(() => {
     if (data && data.data) {
-      setFeaturedProducts(data.data.slice(0, 3)); // Get the first 3 products
+      setFeaturedProducts(data.data.slice(0, 3)); 
     }
   }, [data]);
 
@@ -24,9 +24,9 @@ const FeatureSection = () => {
 
       {/* Check for loading or error */}
       {isLoading ? (
-        <div className="text-center">Loading...</div>
+        <div className="text-center text-orange-400">Loading...</div>
       ) : error ? (
-        <div className="text-red-500">Error fetching products.</div>
+        <div className="text-red-500 text-center">Error fetching products.</div>
       ) : (
         <div className="grid md:grid-cols-3 gap-6">
           {featuredProducts.length > 0 ? (
@@ -34,7 +34,7 @@ const FeatureSection = () => {
               <ProductCard key={product._id} product={product} />
             ))
           ) : (
-            <div className="text-center">No featured products available.</div>
+            <div className="text-center text-orange-400">No featured products available.</div>
           )}
         </div>
       )}

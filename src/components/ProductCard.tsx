@@ -25,12 +25,12 @@ const ProductCard = ({ product }: Props) => {
       </figure>
       <div className="card-body p-4">
         <h2 className="card-title text-orange-600 text-2xl font-bold">{product.name}</h2>
-        <p className="text-lg font-light text-black">Brand: {product.brand}</p>
+        <p className="text-lg font-light text-black">Brand: <span className="font-semibold">{product.brand}</span></p>
         {/* <p className="text-lg font-light text-black">Model: {product.name}</p> */}
-        <p className="text-lg font-light text-black">Category: {product.category}</p>
+        <p className="text-lg font-light text-black">Category: <span className="font-semibold">{product.category}</span></p>
         <p className="font-bold text-3xl text-red-600">${product.price}</p>
-        <div className="card-actions justify-center py-4">
-          <Link to={`/products/${product._id}`} className="mt-2 px-2 py-0.5 border-4 text-xl border-orange-400 bg-orange-400  text-white hover:bg-transparent hover:text-orange-400 font-bold transition-colors duration-300">
+        <div className="card-actions justify-center text-right py-4">
+          <Link to={`/products/${product._id}`} className="mt-2 px-3 py-1 border-4 text-xl border-orange-400 bg-orange-400  text-white hover:bg-transparent hover:text-orange-400 font-bold transition-colors duration-300">
             View Details
           </Link>
         </div>
