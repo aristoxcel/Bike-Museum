@@ -11,8 +11,8 @@ export type TProduct = {
   inStock: boolean;
   isDeleted: boolean;
   createdAt?: Date; 
-  updatedAt?: Date;
-};
+  updatedAt?: Date;mc
+39};
 
 // Response type for a single product
 export type TProductResponse = {

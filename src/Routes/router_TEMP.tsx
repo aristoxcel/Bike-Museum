@@ -9,6 +9,12 @@ import Register from "../pages/Authentication/Register";
 import OrderForm from "../pages/OrderForm/OrderForm";
 
 import AboutUs from "../pages/AboutUs"
+// import AdminProtectedLayout from "../components/ProtectedLayouts/AdminProtectedLayout";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import AdminDashboard from "../pages/Dashboard/AdminDashboard";
+// import UserProtectedLayout from "../components/ProtectedLayouts/UserProtectedLayout";
+import UserDashboard from "../pages/Dashboard/UserDashboard";
+import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +36,10 @@ export const router = createBrowserRouter([
         element: <AboutUs/>,
       },
       {
+        path: "/products/orderForm/:id",
+        element: <OrderForm />,
+      },
+      {
         path: "/login",
         element: <Login />,
       },
@@ -37,10 +47,40 @@ export const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      
+    ],
+  },
+  {
+    path: "/admin/dashboard",
+    element: (
+      // <AdminProtectedLayout>
+        <Dashboard />
+      //  </AdminProtectedLayout> 
+    ),
+    children: [
       {
-        path: "/products/orderForm/:id",
-        element: <OrderForm />,
-      }
+        index: true,
+        element: <AdminDashboard />,
+      },
+      
+    ],
+  },
+  {
+    path: "/user/dashboard",
+    element: (
+      // <UserProtectedLayout>
+        <Dashboard />
+      // </UserProtectedLayout>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UserDashboard />,
+      },
+      {
+        path: "view-order-history",
+        element: <ViewUserOrderHistory />,
+      },
     ],
   },
 ]);
