@@ -9,6 +9,9 @@ import Register from "../pages/Authentication/Register";
 import OrderForm from "../pages/OrderForm/OrderForm";
 
 import AboutUs from "../pages/AboutUs"
+import PaymentSuccess from "../pages/OrderForm/PaymentSuccess";
+import PaymentFail from "../pages/OrderForm/PaymentFail";
+import PaymentCancel from "../pages/OrderForm/PaymentCancel";
 
 export const router = createBrowserRouter([
   {
@@ -40,7 +43,19 @@ export const router = createBrowserRouter([
       {
         path: "/products/orderForm/:id",
         element: <OrderForm />,
-      }
+      },
+      {
+        path: "/payment/success/:tran_id",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "/payment/fail/:tran_id",
+        element: <PaymentFail />,
+      },
+      {
+        path: "/api/payment/cancel/:id",
+        element: <PaymentCancel />,
+      },
     ],
   },
 ]);

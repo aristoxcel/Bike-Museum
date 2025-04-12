@@ -5,7 +5,9 @@ import { useParams } from "react-router-dom";
 const OrderForm = () => {
   const { id } = useParams();
   const url = "https://bike-museum-server-tan.vercel.app/api";
+  // const url = "http://localhost:5000/api";
   const user = "67f4d6a7b8dd5006f0ed6476";
+
 
   const inputClasses =
     "border p-2 w-full rounded-xl text-center border-one placeholder-opacity-70";
@@ -16,6 +18,7 @@ const OrderForm = () => {
     email: string;
     phone: number;
     address: string;
+    transactionId:number
   }
 
   const {
@@ -25,6 +28,7 @@ const OrderForm = () => {
   } = useForm<IOrderData>();
 
   const onSubmit = (data: IOrderData) => {
+    data.transactionId = Number(Date.now())
     data.product = id as string;
     data.user = user;
 
@@ -34,7 +38,7 @@ const OrderForm = () => {
       .post(`${url}/orders/create-order`, data)
       .then((result) => {
         console.log("Order created:", result.data);
-        return axios
+        axios
           .post(`${url}/payment/initiate`, data)
           .then((paymentResult) => {
             console.log("Payment initiated:", paymentResult.data);
