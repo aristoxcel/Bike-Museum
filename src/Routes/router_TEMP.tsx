@@ -9,9 +9,12 @@ import Register from "../pages/Authentication/Register";
 import OrderForm from "../pages/OrderForm/OrderForm";
 
 import AboutUs from "../pages/AboutUs"
-import PaymentSuccess from "../pages/OrderForm/PaymentSuccess";
-import PaymentFail from "../pages/OrderForm/PaymentFail";
-import PaymentCancel from "../pages/OrderForm/PaymentCancel";
+// import AdminProtectedLayout from "../components/ProtectedLayouts/AdminProtectedLayout";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import AdminDashboard from "../pages/Dashboard/AdminDashboard";
+// import UserProtectedLayout from "../components/ProtectedLayouts/UserProtectedLayout";
+import UserDashboard from "../pages/Dashboard/UserDashboard";
+import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +36,14 @@ export const router = createBrowserRouter([
         element: <AboutUs/>,
       },
       {
+        path: "/products/orderForm/:id",
+        element: <OrderForm />,
+      },
+      {
+        path: "/products/orderForm/:id",
+        element: <OrderForm />,
+      },
+      {
         path: "/login",
         element: <Login />,
       },
@@ -40,21 +51,39 @@ export const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      
+    ],
+  },
+  {
+    path: "/admin/dashboard",
+    element: (
+      // <AdminProtectedLayout>
+        <Dashboard />
+      //  </AdminProtectedLayout> 
+    ),
+    children: [
       {
-        path: "/products/orderForm/:id",
-        element: <OrderForm />,
+        index: true,
+        element: <AdminDashboard />,
+      },
+      
+    ],
+  },
+  {
+    path: "/user/dashboard",
+    element: (
+      // <UserProtectedLayout>
+        <Dashboard />
+      // </UserProtectedLayout>
+    ),
+    children: [
+      {
+        index: true,
+        element: <UserDashboard />,
       },
       {
-        path: "/payment/success/:tran_id",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "/payment/fail/:tran_id",
-        element: <PaymentFail />,
-      },
-      {
-        path: "/api/payment/cancel/:id",
-        element: <PaymentCancel />,
+        path: "view-order-history",
+        element: <ViewUserOrderHistory />,
       },
     ],
   },
