@@ -26,7 +26,6 @@ const orderApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    
 
     acceptOrder: builder.mutation({
       query: (bookInfo) => ({
@@ -43,12 +42,12 @@ const orderApi = baseApi.injectEndpoints({
       }),
     }),
     deleteOrder: builder.mutation({
-      query: (orderId: string) => ({
-        url: `/orders/delete-order/${orderId}`,
-        method: "DELETE",
+      query: (orderInfo) => ({
+        url: "/payment/delete-order",
+        method: "PUT",
+        body: orderInfo,
       }),
     }),
-    
   }),
 });
 
