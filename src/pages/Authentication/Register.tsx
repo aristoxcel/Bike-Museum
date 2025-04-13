@@ -2,19 +2,25 @@ import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 import axios from "axios";
 import { useRegisterMutation } from "../../redux/features/auth/authApi";
 
 
+type ApiError = {
+  status?: number;
+  data?: {
+    message?: string;
+    error?: string;
+  };
+};
+
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const {
     handleSubmit,
@@ -24,18 +30,17 @@ const Register = () => {
   } = useForm();
 
   const [registerUser] = useRegisterMutation();
-
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // const toastId = toast.loading("Please wait...");
     try {
       setLoading(true);
+
+      // Upload image to Cloudinary
       const image = data.image[0];
       const newFormData = new FormData();
-      newFormData.append("file", image); // Add the image file
-      newFormData.append("upload_preset", "rakib001"); // Your upload preset
-      newFormData.append("cloud_name", "dtrek2mmx"); // Not necessary for the request
+      newFormData.append("file", image);
+      newFormData.append("upload_preset", "rakib001");
 
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dtrek2mmx/image/upload",
@@ -47,37 +52,48 @@ const Register = () => {
         }
       );
 
-      const imageUrl = response.data.url;
+      const imageUrl = response.data.secure_url || response.data.url;
+
+      // Prepare final user object
+      const { name, email, password, role } = data;
       const userInfo = {
-        ...data,
+        name,
+        email,
+        password,
+        role,
         imageUrl,
       };
-      // console.log(data);
+      console.log("Registering user with:", userInfo);
+
+
       const result = await registerUser(userInfo).unwrap();
-      console.log("result => ", result);
+
       if (result?.success) {
-        toast.success("Registration Successfully..", {
-          // id: toastId,
-          duration: 2000,
-        });
+        toast.success("Registration Successful!", { duration: 2000 });
         reset();
-        setLoading(false);
         navigate("/login");
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.log("error =>", error);
-      toast.error(error.data.message, { duration: 2000 });
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      console.error("Registration Error =>", error);
+      console.log("Error message:", error?.data?.message);
+
+      toast.error(error?.data?.message || "Something went wrong", {
+        duration: 2000,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen  px-4">
+      <div className="flex items-center justify-center min-h-screen px-4">
         <RingLoader size={80} color="#C2410C" />
       </div>
     );
   }
+
 
 
   return (
@@ -90,27 +106,23 @@ const Register = () => {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Full Name
-              </label>
+              <label className="block text-sm font-medium mb-2">Full Name</label>
               <input
                 {...register("name", { required: "Name is required" })}
                 type="text"
                 placeholder="Enter your name..."
-                className={`w-full px-4 py-2  text-white rounded-lg border ${
-                  errors.name
-                    ? "border-orange-500 focus:ring-orange-500"
-                    : "border-gray-700 focus:ring-gray-500"
+                className={`w-full px-4 py-2 text-white rounded-lg border ${errors.name
+                  ? "border-orange-500 focus:ring-orange-500"
+                  : "border-gray-700 focus:ring-gray-500"
                 } focus:outline-none focus:ring-2`}
               />
-              {errors.name && (
-                <p className="text-orange-500 text-sm mt-1">Name is required</p>
+              {typeof errors.name?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.name.message}</p>
               )}
             </div>
+  
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Email Address
-              </label>
+              <label className="block text-sm font-medium mb-2">Email Address</label>
               <input
                 {...register("email", {
                   required: "Email is required",
@@ -121,16 +133,16 @@ const Register = () => {
                 })}
                 type="email"
                 placeholder="Enter your email..."
-                className={`w-full px-4 py-2  text-white rounded-lg border ${
-                  errors.email
-                    ? "border-orange-500 focus:ring-orange-500"
-                    : "border-gray-700 focus:ring-gray-500"
+                className={`w-full px-4 py-2 text-white rounded-lg border ${errors.email
+                  ? "border-orange-500 focus:ring-orange-500"
+                  : "border-gray-700 focus:ring-gray-500"
                 } focus:outline-none focus:ring-2`}
               />
-              {errors.email && (
-                <p className="text-orange-500 text-sm mt-1">Email is required</p>
+              {typeof errors.email?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
+  
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
               <div className="relative">
@@ -140,10 +152,9 @@ const Register = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password..."
-                  className={`w-full px-4 py-2  text-white rounded-lg border ${
-                    errors.password
-                      ? "border-orange-500 focus:ring-orange-500"
-                      : "border-gray-700 focus:ring-gray-500"
+                  className={`w-full px-4 py-2 text-white rounded-lg border ${errors.password
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
                   } focus:outline-none focus:ring-2`}
                 />
                 <button
@@ -151,48 +162,57 @@ const Register = () => {
                   onClick={togglePasswordVisibility}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
                 >
-                  {showPassword ? (
-                    <FaEyeSlash className="w-5 h-5" />
-                  ) : (
-                    <FaEye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-orange-500 text-sm mt-1">
-                  Password is required
-                </p>
+              {typeof errors.password?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
-
+  
             <div>
               <label className="block text-sm font-medium mb-2">Image</label>
-              {loading ? (
-                <p>Uploading, please wait...</p>
-              ) : (
-                <input
-                  {...register("image", { required: "Image is required" })}
-                  type="file"
-                  accept="image/*"
-                  className={`w-full px-4 py-2 text-white rounded-lg  border ${
-                    errors.image
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-700 focus:ring-blue-500"
-                  } focus:outline-none focus:ring-2`}
-                />
-              )}
-              {errors.image && (
-                <p className="text-orange-500 text-sm mt-1">Image is required</p>
+              <input
+                {...register("image", { required: "Image is required" })}
+                type="file"
+                accept="image/*"
+                className={`w-full px-4 py-2 text-white rounded-lg border ${errors.image
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-700 focus:ring-blue-500"
+                } focus:outline-none focus:ring-2`}
+              />
+              {typeof errors.image?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.image.message}</p>
               )}
             </div>
           </div>
+  
+          <div>
+            <label className="block text-sm font-medium mb-2">Role</label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className={`w-full px-4 py-2 text-white bg-transparent rounded-lg border ${errors.role
+                ? "border-orange-500 focus:ring-orange-500"
+                : "border-gray-700 focus:ring-gray-500"
+              } focus:outline-none focus:ring-2`}
+            >
+              <option className="text-black font-semibold bg-orange-400" value="">Select role</option>
+              <option className="text-black font-semibold bg-orange-400" value="user">User</option>
+              <option className="text-black font-semibold bg-orange-400" value="admin">Admin</option>
+            </select>
+            {typeof errors.role?.message === "string" && (
+              <p className="text-orange-500 text-sm mt-1">{errors.role.message}</p>
+            )}
+          </div>
+  
           <button
             type="submit"
             className="w-full px-4 py-2 text-sm text-white font-medium border border-orange-500 rounded-lg bg-[linear-gradient(105deg,_#f97316_4.1%,_#ea580c_54.8%,_#c2410c_92.38%)] flex items-center justify-center"
           >
-            <p>Register</p>
+            Register
           </button>
         </form>
+  
         <p className="text-center text-gray-400 mt-6">
           Already have an account?{" "}
           <Link to={"/login"} className="text-orange-500 hover:underline">
@@ -202,5 +222,7 @@ const Register = () => {
       </div>
     </div>
   );
+  
 };
+
 export default Register;

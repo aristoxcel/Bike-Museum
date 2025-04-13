@@ -58,9 +58,7 @@ const ProductDetails = () => {
             <Link
               to={`/products/orderForm/${product._id}`}
               className="mt-4 px-10 py-4 border-4 text-2xl border-orange-400  text-orange-400 hover:bg-orange-400 hover:text-white font-extrabold transition-colors duration-300"
-              onClick={() => {
-                alert('Added to cart!');
-              }}
+              
             >
               Buy Now
             </Link>

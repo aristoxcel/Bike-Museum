@@ -10,11 +10,12 @@ import OrderForm from "../pages/OrderForm/OrderForm";
 
 import AboutUs from "../pages/AboutUs"
 // import AdminProtectedLayout from "../components/ProtectedLayouts/AdminProtectedLayout";
-import Dashboard from "../pages/Dashboard/Dashboard";
+// import Dashboard from "../pages/Dashboard/Dashboard";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 // import UserProtectedLayout from "../components/ProtectedLayouts/UserProtectedLayout";
 import UserDashboard from "../pages/Dashboard/UserDashboard";
 import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -52,26 +53,17 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/dashboard",
-    element: (
-      // <AdminProtectedLayout>
-        <Dashboard />
-      //  </AdminProtectedLayout> 
-    ),
+    element: <PrivateRoute allowedRoles={["admin"]} />,
     children: [
       {
         index: true,
         element: <AdminDashboard />,
       },
-      
     ],
   },
   {
     path: "/user/dashboard",
-    element: (
-      // <UserProtectedLayout>
-        <Dashboard />
-      // </UserProtectedLayout>
-    ),
+    element: <PrivateRoute allowedRoles={["user"]} />,
     children: [
       {
         index: true,
@@ -82,5 +74,6 @@ export const router = createBrowserRouter([
         element: <ViewUserOrderHistory />,
       },
     ],
-  },
+  }
+  
 ]);
