@@ -2,25 +2,25 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
-import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi"; // Assuming this is the query hook
-import { skipToken } from "@reduxjs/toolkit/query"; // Import skipToken for conditional fetching
+import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
+import { skipToken } from "@reduxjs/toolkit/query"; 
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
 
 const OrderForm = () => {
   const { id } = useParams();
   const url = "http://localhost:5000/api";
   
-  // Assuming you have the currentUser data in Redux or similar state management
+  
   const currentUser = useAppSelector(useCurrentUser);
 
-  // Fetching user data by email
+ 
   const { data: user, isLoading: userLoading, error: userError } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
 
   const inputClasses =
     "border p-2 w-full rounded-xl text-center border-one placeholder-opacity-70";
 
   interface IOrderData {
-    user?: string; // This will now store the user's _id
+    user?: string; 
     product: string;
     email: string;
     phone: number;
@@ -50,10 +50,10 @@ const OrderForm = () => {
       return;
     }
     
-    // Proceed with form submission
+
     data.transactionId = Number(Date.now());
     data.product = id as string;
-    data.user = user.data._id;  // Now accessing _id from user.data
+    data.user = user.data._id;  
 
     console.log("Submitting Order:", data);
 
