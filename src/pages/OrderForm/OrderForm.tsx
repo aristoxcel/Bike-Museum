@@ -53,7 +53,7 @@ const OrderForm = () => {
     // Proceed with form submission
     data.transactionId = Number(Date.now());
     data.product = id as string;
-    data.user = user.data._id;  // Now using user._id instead of user.email
+    data.user = user.data._id;  // Now accessing _id from user.data
 
     console.log("Submitting Order:", data);
 

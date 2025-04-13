@@ -11,6 +11,9 @@ import AboutUs from "../pages/AboutUs";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import UserDashboard from "../pages/Dashboard/UserDashboard";
 import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
+import PaymentSuccess from "../pages/OrderForm/PaymentSuccess";
+import PaymentFail from "../pages/OrderForm/PaymentFail";
+import PaymentCancel from "../pages/OrderForm/PaymentCancel";
 import PrivateRoute from "./PrivateRoute";
 import CreateProductForm from "../pages/admin/CreateProductForm";
 
@@ -42,6 +45,18 @@ export const router = createBrowserRouter([
             element: <OrderForm />,
           },
         ],
+      },
+      {
+        path: "/products/success-payment/:tran_Id",
+        element: <PaymentSuccess></PaymentSuccess>,
+      },
+      {
+        path: "/products/failed-payment/:tran_Id",
+        element: <PaymentFail></PaymentFail>,
+      },
+      {
+        path: "/products/cancel-payment/:tran_Id",
+        element: <PaymentCancel></PaymentCancel>,
       },
       {
         path: "/login",
