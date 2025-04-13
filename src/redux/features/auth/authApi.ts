@@ -17,14 +17,17 @@ const authApi = baseApi.injectEndpoints({
         url: "auth/register",
         method: "POST",
         body: userInfo,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
     getAllUserData: builder.query({
       query: () => ({
-        url: "auth/admin/get-all-user-information",
+        url: "auth/admin/all",
+      }),
+    }),
+    getUserByEmail: builder.query({
+      query: (email: string) => ({
+        url: `user/getSingle/${email}`,
+        method: "GET",
       }),
     }),
     deactivateAccount: builder.mutation({
@@ -58,4 +61,5 @@ export const {
   useDeactivateAccountMutation,
   useActiveAccountMutation,
   useChangeRoleMutation,
+  useGetUserByEmailQuery,
 } = authApi;
