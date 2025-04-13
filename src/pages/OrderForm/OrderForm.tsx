@@ -3,29 +3,40 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
-import { skipToken } from "@reduxjs/toolkit/query"; 
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
+import { useGetSingleProductQuery } from "../../redux/features/products/productApi"; 
+import { RingLoader } from "react-spinners";
 
 const OrderForm = () => {
   const { id } = useParams();
   const url = "http://localhost:5000/api";
-  
-  
+
   const currentUser = useAppSelector(useCurrentUser);
 
- 
-  const { data: user, isLoading: userLoading, error: userError } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
+  const {
+    data: productData,
+    isLoading: productLoading,
+    error: productError,
+  } = useGetSingleProductQuery(id as string); // ✅ Get product data
+
+  const {
+    data: user,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
 
   const inputClasses =
     "border p-2 w-full rounded-xl text-center border-one placeholder-opacity-70";
 
   interface IOrderData {
-    user?: string; 
+    user?: string;
     product: string;
     email: string;
     phone: number;
     address: string;
     transactionId: number;
+    totalPrice?: number;
   }
 
   const {
@@ -49,11 +60,11 @@ const OrderForm = () => {
       console.error("User ID is missing. Full user data:", user);
       return;
     }
-    
 
     data.transactionId = Number(Date.now());
     data.product = id as string;
-    data.user = user.data._id;  
+    data.user = user.data._id;
+    data.totalPrice = productData?.data?.price || 0; // ✅ Add totalPrice
 
     console.log("Submitting Order:", data);
 
@@ -79,6 +90,25 @@ const OrderForm = () => {
   return (
     <div className="w-10/12 mx-auto my-10 bg-four py-10 text-white">
       <div className="md:w-2/5 mx-auto">
+        {/* ✅ Show product info */}
+        {productLoading ? (
+          <RingLoader size={80} color="#C2410C" />
+        ) : productError ? (
+          <p className="text-center text-red-500">Failed to load product.</p>
+        ) : (
+          <div className="mb-6 p-4 border rounded-xl bg-one text-white shadow-md text-center">
+          <img
+            src={productData?.data?.photo}
+            alt={productData?.data?.name}
+            className="w-32 h-32 object-cover mx-auto rounded-md mb-3"
+          />
+          
+          <h2 className="text-xl font-bold mb-1">{productData?.data?.name}</h2>
+          <p><strong>Category:</strong> {productData?.data?.category}</p>
+          <p><strong>Price:</strong> ৳{productData?.data?.price}</p>
+        </div>
+        )}
+
         <h1 className="text-2xl font-bold mb-6 text-center">Order Form</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
