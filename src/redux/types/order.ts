@@ -8,4 +8,5 @@ import { TProduct } from "./product";
     orderStatus: string;
     transactionId: string;
     userInfo: TUser;
+    status: string;
   }
