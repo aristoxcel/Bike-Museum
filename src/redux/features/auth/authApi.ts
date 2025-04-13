@@ -21,7 +21,7 @@ const authApi = baseApi.injectEndpoints({
     }),
     getAllUserData: builder.query({
       query: () => ({
-        url: "auth/admin/all",
+        url: "user/all",
       }),
     }),
     getUserByEmail: builder.query({
