@@ -1,24 +1,31 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
+import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
+import { skipToken } from "@reduxjs/toolkit/query"; 
+import { useCurrentUser } from "../../redux/features/auth/authSlice";
 
 const OrderForm = () => {
   const { id } = useParams();
-  // const url = "https://bike-museum-server-tan.vercel.app/api";
   const url = "http://localhost:5000/api";
-  const user = "67f4d6a7b8dd5006f0ed6476";
+  
+  
+  const currentUser = useAppSelector(useCurrentUser);
 
+ 
+  const { data: user, isLoading: userLoading, error: userError } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
 
   const inputClasses =
     "border p-2 w-full rounded-xl text-center border-one placeholder-opacity-70";
 
   interface IOrderData {
-    user?: string;
+    user?: string; 
     product: string;
     email: string;
     phone: number;
     address: string;
-    transactionId:number
+    transactionId: number;
   }
 
   const {
@@ -28,9 +35,25 @@ const OrderForm = () => {
   } = useForm<IOrderData>();
 
   const onSubmit = (data: IOrderData) => {
-    data.transactionId = Number(Date.now())
+    if (userLoading) {
+      console.log("Loading user data...");
+      return;
+    }
+
+    if (userError) {
+      console.error("Error fetching user data:", userError);
+      return;
+    }
+
+    if (!user?.data?._id) {
+      console.error("User ID is missing. Full user data:", user);
+      return;
+    }
+    
+
+    data.transactionId = Number(Date.now());
     data.product = id as string;
-    data.user = user;
+    data.user = user.data._id;  
 
     console.log("Submitting Order:", data);
 
