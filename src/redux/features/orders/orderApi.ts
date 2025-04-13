@@ -45,7 +45,7 @@ const orderApi = baseApi.injectEndpoints({
     }),
     deleteOrder: builder.mutation({
       query: (orderId: string) => ({
-        url: `/orders/delete-order?ProductId=${orderId}`,
+        url: `/orders/delete-order/${orderId}`,
         method: "DELETE",
       }),
     }),
