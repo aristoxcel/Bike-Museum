@@ -14,17 +14,16 @@ const orderApi = baseApi.injectEndpoints({
       query: (userEmail) => ({
         url: "/payment/get-admin-order-data",
         method: "PUT",
-        body: { email: userEmail }, // object sent as email
+        body: { email: userEmail }, 
         headers: {
-          "Content-Type": "application/json", // JSON data send
+          "Content-Type": "application/json", 
         },
       }),
     }),
-    getUserOrdersData: builder.mutation({
+    getUserOrdersData: builder.query({
       query: (userId) => ({
-        url: "/orders/get-user-order-data",
-        method: "POST",
-        body: { userId }, // 👈 make sure you're sending this
+        url: `/orders/get-user-order-data/${userId}`,
+        method: "GET",
       }),
     }),
     
@@ -56,7 +55,7 @@ const orderApi = baseApi.injectEndpoints({
 export const {
   useAddOrderMutation,
   useGetAdminOrdersDataQuery,
-  useGetUserOrdersDataMutation,
+  useGetUserOrdersDataQuery,
   useAcceptOrderMutation,
   useCancelOrderMutation,
   useDeleteOrderMutation,

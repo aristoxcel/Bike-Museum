@@ -4,46 +4,37 @@ import { toast } from "sonner";
 import { RingLoader } from "react-spinners";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";
-import { useGetUserOrdersDataMutation } from "../../redux/features/orders/orderApi";
+import { useGetUserOrdersDataQuery } from "../../redux/features/orders/orderApi";
 import { TOrder } from "../../redux/types/order";
 import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { useEffect } from "react";
 
 const UserDashboard = () => {
   const currentUser = useAppSelector(useCurrentUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  console.log(currentUser)
+
+  // Get user details by email
   const {
-    data: user,
+    data: userData,
     isLoading: userLoading,
     error: userError,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
-  console.log(user)
-  const [getUserOrders, { data, isLoading: ordersLoading, error: ordersError }] =
-    useGetUserOrdersDataMutation();
-  useEffect(() => {
-    if (user?.data?._id) {
-      console.log("Fetching orders for user:", user.data._id);
-      getUserOrders(user.data._id)
-        .unwrap()
-        .then((res) => {
-          console.log("Orders fetched successfully:", res);
-        })
-        .catch((err) => {
-          console.error("Error fetching orders:", err);
-        });
-    }
-  }, [user?.data?._id, getUserOrders]);
-
+ console.log(userData)
+  // Get user orders by user ID (from userData)
+  const {
+    data: orderResponse,
+    isLoading: ordersLoading,
+    error: ordersError,
+  } = useGetUserOrdersDataQuery(userData?.data?._id ?? skipToken);
+ console.log(orderResponse)
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logout Successfully");
     navigate("/");
   };
 
-  // If either user or orders are loading, show loading spinner
+  // Show loading spinner
   if (userLoading || ordersLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen px-4">
@@ -52,22 +43,20 @@ const UserDashboard = () => {
     );
   }
 
-  // If there's an error while fetching user or orders, show a message
+  // Show error
   if (userError || ordersError) {
     toast.error("Failed to fetch data. Please try again later.");
     return null;
   }
 
-  // Check if user data or email is missing
-  if (!user?.data?.email) {
+  if (!userData?.data?.email) {
     toast.error("User email is missing!");
     return null;
   }
 
-  const orderData = data?.data || [];
+  const orderData = orderResponse?.data || [];
   const priceData = orderData.map((item: TOrder) => Number(item?.product?.price));
-  const totalPrice =
-    priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
+  const totalPrice = priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] text-white">
@@ -82,13 +71,13 @@ const UserDashboard = () => {
             <div className="text-center">
               <motion.img
                 whileHover={{ scale: 1.05 }}
-                src={user?.data?.imageUrl || "/default-avatar.png"}
+                src={userData?.data.imageUrl || "/default-avatar.png"}
                 alt="User"
                 className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-400"
               />
-              <h2 className="text-xl font-bold mb-2">{user?.data?.name || "User"}</h2>
-              <p className="text-sm text-gray-400">{user?.data?.email}</p>
-              <p className="text-sm text-gray-400">Role : {user?.data?.role || "N/A"}</p>
+              <h2 className="text-xl font-bold mb-2">{userData?.data?.name || "User"}</h2>
+              <p className="text-sm text-gray-400">{userData?.data?.email}</p>
+              <p className="text-sm text-gray-400">Role : {userData?.data?.role || "N/A"}</p>
             </div>
 
             <div className="my-10 flex flex-col items-center justify-center gap-5">
@@ -131,7 +120,6 @@ const UserDashboard = () => {
                 <h3 className="text-gray-400">Active Orders</h3>
                 <p className="text-2xl font-bold">{orderData.length}</p>
                 <div className="h-1 bg-green-500 mt-2 rounded-full w-1/2" />
-                
               </motion.div>
             </div>
 

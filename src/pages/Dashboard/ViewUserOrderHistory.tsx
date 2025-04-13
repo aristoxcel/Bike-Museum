@@ -5,7 +5,7 @@ import { RingLoader } from "react-spinners";
 import { toast } from "sonner";
 import {
   useDeleteOrderMutation,
-  useGetUserOrdersDataMutation,
+  useGetUserOrdersDataQuery,
 } from "../../redux/features/orders/orderApi";
 import { TOrder } from "../../redux/types/order";
 import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
@@ -21,29 +21,16 @@ const ViewUserOrderHistory: React.FC = () => {
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
 
   const [deleteOrder] = useDeleteOrderMutation();
-  const [getUserOrders, orderResponse] = useGetUserOrdersDataMutation();
+  const { data: orderData, isLoading: ordersLoading, error: ordersError } = useGetUserOrdersDataQuery(user?.data?._id ?? skipToken);
 
   const [userOrderData, setUserOrderData] = useState<TOrder[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<TOrder | null>(null);
 
-  const ordersLoading = orderResponse?.isLoading;
-  const ordersError = orderResponse?.error;
-
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (user?.data?._id) {
-        try {
-          const result = await getUserOrders(user.data._id).unwrap();
-          setUserOrderData(result.data); // Assumes response shape is { data: [...] }
-        } catch (err) {
-          console.log(err)
-          toast.error("Failed to fetch orders.");
-        }
-      }
-    };
-
-    fetchOrders();
-  }, [user?.data?._id, getUserOrders]);
+    if (orderData) {
+      setUserOrderData(orderData.data); // Assumes response shape is { data: [...] }
+    }
+  }, [orderData]);
 
   if (userLoading || ordersLoading) {
     return (

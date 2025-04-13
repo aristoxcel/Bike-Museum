@@ -5,7 +5,7 @@ import { RootState } from '../store'; // adjust path if needed
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api', // or use env variables for production
+    baseUrl: 'http://localhost:5000/api', 
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
