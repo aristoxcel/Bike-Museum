@@ -12,7 +12,7 @@ const orderApi = baseApi.injectEndpoints({
     }),
     getAdminOrdersData: builder.query({
       query: (userEmail) => ({
-        url: "/payment/get-admin-order-data",
+        url: "/orders",
         method: "PUT",
         body: { email: userEmail }, // object sent as email
         headers: {
@@ -22,13 +22,13 @@ const orderApi = baseApi.injectEndpoints({
     }),
     getUserOrdersData: builder.mutation({
       query: (userId) => ({
-        url: "/orders/get-user-order-data",
+        url: `orders/${userId}`,
         method: "POST",
         body: { userId }, // 👈 make sure you're sending this
       }),
     }),
     
-
+    // 67fb984e996e2aaa8ea0e5bd
     acceptOrder: builder.mutation({
       query: (bookInfo) => ({
         url: "/payment/accept-order",
