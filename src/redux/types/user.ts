@@ -7,7 +7,7 @@ export interface IUser {
   email: string;
   role: TUserRole;
   status: TUserStatus;
-  imageUrl?: string; // Optional if not every user has it
+  imageUrl?: string; 
   createdAt?: string;
   updatedAt?: string;
 }

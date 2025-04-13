@@ -26,14 +26,13 @@ const authApi = baseApi.injectEndpoints({
     }),
     getUserByEmail: builder.query({
       query: (email: string) => {
-        // Get the token from localStorage or wherever it's stored
-        const token = localStorage.getItem('access_token'); // Change this based on your storage method
+        const token = localStorage.getItem('access_token'); 
 
         return {
           url: `user/getSingle/${email}`,
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         };
       },
