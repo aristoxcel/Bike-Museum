@@ -13,23 +13,30 @@ const UserDashboard = () => {
   const currentUser = useAppSelector(useCurrentUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
- console.log(currentUser)
+
   const {
-    data: user,
+    data: userResponse,
     isLoading: userLoading,
     error: userError,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
- console.log(user)
-  const { data, isLoading: ordersLoading, error: ordersError } =
-    useGetUserOrdersDataQuery(user?.email ?? skipToken);
+
+  const user = userResponse?.data;
+  console.log("currentUser from redux:", currentUser);
+  console.log("user fetched from API:", user);
+
+  const {
+    data: ordersResponse,
+    isLoading: ordersLoading,
+    error: ordersError,
+  } = useGetUserOrdersDataQuery(user?.email ?? skipToken);
 
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logout Successfully");
     navigate("/");
   };
+  console.log('order data nai', ordersResponse?.data)
 
-  // If either user or orders are loading, show loading spinner
   if (userLoading || ordersLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen px-4">
@@ -38,22 +45,21 @@ const UserDashboard = () => {
     );
   }
 
-  // If there's an error while fetching user or orders, show a message
   if (userError || ordersError) {
     toast.error("Failed to fetch data. Please try again later.");
     return null;
   }
 
-  // Check if user data or email is missing
-  if (!user?.email) {
+  if (!user || !user.email) {
+    console.warn("User email is missing:", user);
     toast.error("User email is missing!");
     return null;
   }
 
-  const orderData = data?.data || [];
-  const priceData = orderData.map((item: TOrder) => Number(item?.product?.price));
+  const orderData = ordersResponse?.data || [];
+  
   const totalPrice =
-    priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
+    orderData.reduce((sum: number, order: TOrder) => sum + Number(order?.product?.price || 0), 0) || 0;
 
   return (
     <div className="min-h-screen text-white">
