@@ -1,21 +1,31 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
+import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi"; // Assuming this is the query hook
+import { skipToken } from "@reduxjs/toolkit/query"; // Import skipToken for conditional fetching
+import { useCurrentUser } from "../../redux/features/auth/authSlice";
 
 const OrderForm = () => {
   const { id } = useParams();
-  const url = "https://bike-museum-server-tan.vercel.app/api";
-  const user = "67f4d6a7b8dd5006f0ed6476";
+  const url = "http://localhost:5000/api";
+  
+  // Assuming you have the currentUser data in Redux or similar state management
+  const currentUser = useAppSelector(useCurrentUser);
+
+  // Fetching user data by email
+  const { data: user, isLoading: userLoading, error: userError } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
 
   const inputClasses =
     "border p-2 w-full rounded-xl text-center border-one placeholder-opacity-70";
 
   interface IOrderData {
-    user?: string;
+    user?: string; // This will now store the user's _id
     product: string;
     email: string;
     phone: number;
     address: string;
+    transactionId: number;
   }
 
   const {
@@ -25,8 +35,25 @@ const OrderForm = () => {
   } = useForm<IOrderData>();
 
   const onSubmit = (data: IOrderData) => {
+    if (userLoading) {
+      console.log("Loading user data...");
+      return;
+    }
+
+    if (userError) {
+      console.error("Error fetching user data:", userError);
+      return;
+    }
+
+    if (!user?.data?._id) {
+      console.error("User ID is missing. Full user data:", user);
+      return;
+    }
+    
+    // Proceed with form submission
+    data.transactionId = Number(Date.now());
     data.product = id as string;
-    data.user = user;
+    data.user = user.data._id;  // Now using user._id instead of user.email
 
     console.log("Submitting Order:", data);
 
@@ -34,7 +61,7 @@ const OrderForm = () => {
       .post(`${url}/orders/create-order`, data)
       .then((result) => {
         console.log("Order created:", result.data);
-        return axios
+        axios
           .post(`${url}/payment/initiate`, data)
           .then((paymentResult) => {
             console.log("Payment initiated:", paymentResult.data);
