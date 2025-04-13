@@ -16,6 +16,7 @@ import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import UserDashboard from "../pages/Dashboard/UserDashboard";
 import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
 import PrivateRoute from "./PrivateRoute";
+import CreateProductForm from "../pages/admin/CreateProductForm";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <AdminDashboard />,
+      },
+      {
+        path: "/admin/dashboard/products/add",
+        element: <CreateProductForm />,
       },
     ],
   },
