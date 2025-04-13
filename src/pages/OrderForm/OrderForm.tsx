@@ -18,7 +18,7 @@ const OrderForm = () => {
     data: productData,
     isLoading: productLoading,
     error: productError,
-  } = useGetSingleProductQuery(id as string); // ✅ Get product data
+  } = useGetSingleProductQuery(id as string); 
 
   const {
     data: user,
@@ -64,7 +64,11 @@ const OrderForm = () => {
     data.transactionId = Number(Date.now());
     data.product = id as string;
     data.user = user.data._id;
+<<<<<<< HEAD
     console.log("order data:",data);
+=======
+    data.totalPrice = productData?.data?.price || 0; 
+>>>>>>> c73854907417b7745f670988832c226303e86e8e
 
     console.log("Submitting Order:", data);
 
@@ -90,7 +94,7 @@ const OrderForm = () => {
   return (
     <div className="w-10/12 mx-auto my-10 bg-four py-10 text-white">
       <div className="md:w-2/5 mx-auto">
-        {/* ✅ Show product info */}
+        {/* Show product info */}
         {productLoading ? (
           <RingLoader size={80} color="#C2410C" />
         ) : productError ? (
