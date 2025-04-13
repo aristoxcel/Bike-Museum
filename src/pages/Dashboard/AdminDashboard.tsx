@@ -9,32 +9,56 @@ import {
   useGetUserByEmailQuery,
 } from "../../redux/features/auth/authApi";
 import { useGetAdminOrdersDataQuery } from "../../redux/features/orders/orderApi";
-import { useGetAllProductsQuery } from "../../redux/features/products/productApi";
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+} from "../../redux/features/products/productApi";
 import { TOrder } from "../../redux/types/order";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { persistor } from "../../redux/store";
 
 const AdminDashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector(useCurrentUser);
+  console.log(currentUser);
 
   // ✅ Get full admin info by email
   const {
     data: user,
     isLoading: userLoading,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
+  console.log(user);
 
   const { data: usersData } = useGetAllUserDataQuery(skipToken);
-  const { data: orderData, isLoading: ordersLoading } = useGetAdminOrdersDataQuery(
-    currentUser?.email ?? skipToken
-  );
-  const { isLoading: productsLoading } = useGetAllProductsQuery(skipToken);
+  const { data: orderData, isLoading: ordersLoading } =
+    useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
+  const { data: productData, isLoading: productsLoading } =
+    useGetAllProductsQuery({});
+
+  // ✅ Call delete mutation hook before any return
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const products = productData?.data || [];
+  console.log(products.length)
 
   const handleLogout = () => {
+    persistor.purge();
     dispatch(logout());
+    localStorage.removeItem("auth_token");
     toast.success("Logout Successfully");
-    navigate("/");
+    navigate("/login");
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id).unwrap();
+      toast.success("Product deleted successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete product");
+    }
   };
 
   if (ordersLoading || productsLoading || userLoading) {
@@ -45,8 +69,11 @@ const AdminDashboard = () => {
     );
   }
 
-  const priceData = orderData?.map((item: TOrder) => Number(item.product.price));
-  const totalPrice = priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
+  const priceData = orderData?.map((item: TOrder) =>
+    Number(item.product.price)
+  );
+  const totalPrice =
+    priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] text-white">
@@ -62,13 +89,13 @@ const AdminDashboard = () => {
             <div className="text-center">
               <motion.img
                 whileHover={{ scale: 1.05 }}
-                src={user?.imageUrl || "/default-profile.png"}
+                src={user?.data?.imageUrl || "/default-profile.png"}
                 alt="Admin"
                 className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-400"
               />
-              <h2 className="text-xl font-bold mb-2">{user?.name || "Admin"}</h2>
-              <p className="text-sm text-gray-400">{user?.email}</p>
-              <p className="text-sm text-gray-400">Role: {user?.role}</p>
+              <h2 className="text-xl font-bold mb-2">{user?.data?.name || "Admin"}</h2>
+              <p className="text-sm text-gray-400">{user?.data?.email}</p>
+              <p className="text-sm text-gray-400">Role: {user?.data?.role}</p>
             </div>
 
             <div className="my-10 flex flex-col items-center justify-center gap-5">
@@ -130,6 +157,60 @@ const AdminDashboard = () => {
                     />
                   ))}
                 </div>
+              </div>
+            </motion.div>
+
+            {/* Product Management */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mb-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Products</h3>
+
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => navigate("/admin/dashboard/products/add")}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Add Product
+                </button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#2B1E36]">
+                    <tr>
+                      <th className="p-3 text-left">Name</th>
+                      <th className="p-3 text-left">Price</th>
+                      <th className="p-3 text-left">Stock</th>
+                      <th className="p-3 text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products?.map((product) => (
+                      <tr key={product._id}>
+                        <td className="p-3">{product.name}</td>
+                        <td className="p-3">৳ {product.price}</td>
+                        <td className="p-3">{product.inStock}</td>
+                        <td className="p-3 flex gap-2">
+                          <button
+                            onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </motion.div>
 

@@ -18,11 +18,11 @@ type LoginResponse = {
 };
 
 // ✅ Type for error response
-type ApiError = {
-  data?: {
-    message?: string;
-  };
-};
+// type ApiError = {
+//   data?: {
+//     message?: string;
+//   };
+// };
 
 
 const Login = () => {
@@ -68,29 +68,33 @@ const Login = () => {
         return;
       }
     }
-
+  
     try {
       const result = (await login(data).unwrap()) as LoginResponse;
-
+  
       const user = verifyToken(result.data.accessToken) as TUser;
-
+  
       if (result?.success) {
         toast.success("Login successful!", { duration: 2000 });
       }
-
+  
       dispatch(setUser({ user, token: result.data.accessToken }));
       localStorage.setItem("auth_token", result.data.accessToken);
-
+  
       if (user.role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/");
       }
     } catch (err: unknown) {
-      const error = err as ApiError;
-      toast.error(error?.data?.message || "Login failed", { duration: 2000 });
+      if (err instanceof Error) {
+        toast.error(err.message || "Login failed", { duration: 2000 });
+      } else {
+        toast.error("An unknown error occurred", { duration: 2000 });
+      }
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] px-4">
