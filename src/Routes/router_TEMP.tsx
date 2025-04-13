@@ -7,12 +7,8 @@ import AllProducts from "../pages/AllProducts";
 import Login from "../pages/Authentication/Login";
 import Register from "../pages/Authentication/Register";
 import OrderForm from "../pages/OrderForm/OrderForm";
-
-import AboutUs from "../pages/AboutUs"
-// import AdminProtectedLayout from "../components/ProtectedLayouts/AdminProtectedLayout";
-// import Dashboard from "../pages/Dashboard/Dashboard";
+import AboutUs from "../pages/AboutUs";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
-// import UserProtectedLayout from "../components/ProtectedLayouts/UserProtectedLayout";
 import UserDashboard from "../pages/Dashboard/UserDashboard";
 import ViewUserOrderHistory from "../pages/Dashboard/ViewUserOrderHistory";
 import PrivateRoute from "./PrivateRoute";
@@ -31,15 +27,21 @@ export const router = createBrowserRouter([
       },
       {
         path: "/products/:id",
-        element: <ProductDetails/>,
+        element: <ProductDetails />,
       },
       {
         path: "/about-us",
-        element: <AboutUs/>,
+        element: <AboutUs />,
       },
       {
         path: "/products/orderForm/:id",
-        element: <OrderForm />,
+        element: <PrivateRoute allowedRoles={["user"]} />,
+        children: [
+          {
+            index: true,
+            element: <OrderForm />,
+          },
+        ],
       },
       {
         path: "/login",
@@ -49,7 +51,6 @@ export const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
-      
     ],
   },
   {
@@ -79,6 +80,5 @@ export const router = createBrowserRouter([
         element: <ViewUserOrderHistory />,
       },
     ],
-  }
-  
+  },
 ]);
