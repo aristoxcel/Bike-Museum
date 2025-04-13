@@ -9,33 +9,99 @@ import {
   useGetUserByEmailQuery,
 } from "../../redux/features/auth/authApi";
 import { useGetAdminOrdersDataQuery } from "../../redux/features/orders/orderApi";
-import { useGetAllProductsQuery } from "../../redux/features/products/productApi";
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+} from "../../redux/features/products/productApi";
 import { TOrder } from "../../redux/types/order";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { persistor } from "../../redux/store";
+import {
+  useDeactivateAccountMutation,
+  useActiveAccountMutation,
+  useChangeRoleMutation,
+} from "../../redux/features/auth/authApi";
+import { IUser } from "../../redux/types/user";
 
 const AdminDashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector(useCurrentUser);
+  console.log(currentUser);
 
   // ✅ Get full admin info by email
   const {
     data: user,
     isLoading: userLoading,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
+  console.log(user);
 
-  const { data: usersData } = useGetAllUserDataQuery(skipToken);
-  const { data: orderData, isLoading: ordersLoading } = useGetAdminOrdersDataQuery(
-    currentUser?.email ?? skipToken
-  );
-  const { isLoading: productsLoading } = useGetAllProductsQuery(skipToken);
+  const { data: usersData } = useGetAllUserDataQuery({});
+  const { data: orderData, isLoading: ordersLoading } =
+    useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
+  const { data: productData, isLoading: productsLoading } =
+    useGetAllProductsQuery({});
+  const [deactivateAccount] = useDeactivateAccountMutation();
+  const [activeAccount] = useActiveAccountMutation();
+  const [changeRole] = useChangeRoleMutation();
+  console.log(usersData)
+
+
+  // ✅ Call delete mutation hook before any return
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const products = productData?.data || [];
+  console.log(products.length)
 
   const handleLogout = () => {
+    persistor.purge();
     dispatch(logout());
+    localStorage.removeItem("auth_token");
     toast.success("Logout Successfully");
-    navigate("/");
+    navigate("/login");
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id).unwrap();
+      toast.success("Product deleted successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete product");
+    }
+  };
+
+  const handleDeactivate = async (email: string) => {
+    try {
+      await deactivateAccount({ email }).unwrap();
+      toast.success("User deactivated successfully");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to deactivate user");
+    }
+  };
+
+  const handleActivate = async (email: string) => {
+    try {
+      await activeAccount({ email }).unwrap();
+      toast.success("User activated successfully");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to activate user");
+    }
+  };
+
+  const handleChangeRole = async (email: string, role: string) => {
+    try {
+      await changeRole({ email, role }).unwrap();
+      toast.success("User role updated");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to update role");
+    }
+  };
+
 
   if (ordersLoading || productsLoading || userLoading) {
     return (
@@ -45,8 +111,11 @@ const AdminDashboard = () => {
     );
   }
 
-  const priceData = orderData?.map((item: TOrder) => Number(item.product.price));
-  const totalPrice = priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
+  const priceData = orderData?.map((item: TOrder) =>
+    Number(item.product.price)
+  );
+  const totalPrice =
+    priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] text-white">
@@ -62,13 +131,13 @@ const AdminDashboard = () => {
             <div className="text-center">
               <motion.img
                 whileHover={{ scale: 1.05 }}
-                src={user?.imageUrl || "/default-profile.png"}
+                src={user?.data?.imageUrl || "/default-profile.png"}
                 alt="Admin"
                 className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-400"
               />
-              <h2 className="text-xl font-bold mb-2">{user?.name || "Admin"}</h2>
-              <p className="text-sm text-gray-400">{user?.email}</p>
-              <p className="text-sm text-gray-400">Role: {user?.role}</p>
+              <h2 className="text-xl font-bold mb-2">{user?.data?.name || "Admin"}</h2>
+              <p className="text-sm text-gray-400">{user?.data?.email}</p>
+              <p className="text-sm text-gray-400">Role: {user?.data?.role}</p>
             </div>
 
             <div className="my-10 flex flex-col items-center justify-center gap-5">
@@ -133,8 +202,67 @@ const AdminDashboard = () => {
               </div>
             </motion.div>
 
+            {/* Product Management */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mb-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Products</h3>
+
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => navigate("/admin/dashboard/products/add")}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Add Product
+                </button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#2B1E36]">
+                    <tr>
+                      <th className="p-3 text-left">Name</th>
+                      <th className="p-3 text-left">Price</th>
+                      <th className="p-3 text-left">Stock</th>
+                      <th className="p-3 text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products?.map((product) => (
+                      <tr key={product._id}>
+                        <td className="p-3">{product.name}</td>
+                        <td className="p-3">৳ {product.price}</td>
+                        <td className="p-3">{product.inStock}</td>
+                        <td className="p-3 flex gap-2">
+                          <button
+                            onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
             {/* Orders Table */}
-            <div className="overflow-x-auto">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mt-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Orders</h3>
               <table className="w-full">
                 <thead className="bg-[#3A2E42]">
                   <tr>
@@ -159,7 +287,79 @@ const AdminDashboard = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </motion.div>
+            {/* Users Table */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mb-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Users</h3>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#2B1E36]">
+                    <tr>
+                      <th className="p-3 text-left">Name</th>
+                      <th className="p-3 text-left">Email</th>
+                      <th className="p-3 text-left">Role</th>
+                      <th className="p-3 text-left">Status</th>
+                      <th className="p-3 text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersData?.data?.map((user: IUser) => (
+                      <tr key={user._id}>
+                        <td className="p-3">{user.name}</td>
+                        <td className="p-3">{user.email}</td>
+                        <td className="p-3 capitalize">{user.role}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2 py-1 rounded-full ${user.status === "active"
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-red-500/20 text-red-400"
+                              }`}
+                          >
+                            {user.status}
+                          </span>
+                        </td>
+                        <td className="p-3 flex gap-2 flex-wrap">
+                          {user.status === "active" ? (
+                            <button
+                              onClick={() => handleDeactivate(user.email)}
+                              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                              Deactivate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleActivate(user.email)}
+                              className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                            >
+                              Activate
+                            </button>
+                          )}
+                          <button
+                            onClick={() =>
+                              handleChangeRole(
+                                user.email,
+                                user.role === "admin" ? "user" : "admin"
+                              )
+                            }
+                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >
+                            Make {user.role === "admin" ? "User" : "Admin"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+
+
           </motion.main>
         </div>
       </div>

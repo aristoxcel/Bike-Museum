@@ -19,6 +19,7 @@ import PaymentSuccess from "../pages/OrderForm/PaymentSuccess";
 import PaymentFail from "../pages/OrderForm/PaymentFail";
 import PaymentCancel from "../pages/OrderForm/PaymentCancel";
 import PrivateRoute from "./PrivateRoute";
+import CreateProductForm from "../pages/admin/CreateProductForm";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <AdminDashboard />,
+      },
+      {
+        path: "/admin/dashboard/products/add",
+        element: <CreateProductForm />,
       },
     ],
   },

@@ -21,14 +21,22 @@ const authApi = baseApi.injectEndpoints({
     }),
     getAllUserData: builder.query({
       query: () => ({
-        url: "auth/admin/all",
+        url: "user/all",
       }),
     }),
     getUserByEmail: builder.query({
-      query: (email: string) => ({
-        url: `user/getSingle/${email}`,
-        method: "GET",
-      }),
+      query: (email: string) => {
+        // Get the token from localStorage or wherever it's stored
+        const token = localStorage.getItem('access_token'); // Change this based on your storage method
+
+        return {
+          url: `user/getSingle/${email}`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        };
+      },
     }),
     deactivateAccount: builder.mutation({
       query: (userInfo) => ({
