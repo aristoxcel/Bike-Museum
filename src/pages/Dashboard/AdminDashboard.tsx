@@ -356,9 +356,6 @@ const AdminDashboard = () => {
                 </table>
               </div>
             </motion.div>
-
-
-
           </motion.main>
         </div>
       </div>

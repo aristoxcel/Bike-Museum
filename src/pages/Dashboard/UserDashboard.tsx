@@ -14,27 +14,26 @@ const UserDashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // Get user details by email
+ 
   const {
     data: userData,
     isLoading: userLoading,
     error: userError,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
- console.log(userData)
-  // Get user orders by user ID (from userData)
+ 
   const {
     data: orderResponse,
     isLoading: ordersLoading,
     error: ordersError,
   } = useGetUserOrdersDataQuery(userData?.data?._id ?? skipToken);
- console.log(orderResponse)
+
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logout Successfully");
     navigate("/");
   };
 
-  // Show loading spinner
+
   if (userLoading || ordersLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen px-4">

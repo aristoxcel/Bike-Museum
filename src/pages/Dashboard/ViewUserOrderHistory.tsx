@@ -28,7 +28,7 @@ const ViewUserOrderHistory: React.FC = () => {
 
   useEffect(() => {
     if (orderData) {
-      setUserOrderData(orderData.data); // Assumes response shape is { data: [...] }
+      setUserOrderData(orderData.data);
     }
   }, [orderData]);
 
