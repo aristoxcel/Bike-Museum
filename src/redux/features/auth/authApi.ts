@@ -4,40 +4,49 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (userInfo) => ({
-        url: "/api/auth/login",
+        url: "auth/login",
         method: "POST",
         body: userInfo,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
     register: builder.mutation({
       query: (userInfo) => ({
-        url: "/api/auth/register",
+        url: "auth/register",
         method: "POST",
         body: userInfo,
       }),
     }),
     getAllUserData: builder.query({
       query: () => ({
-        url: "/api/auth/admin/get-all-user-information",
+        url: "auth/admin/all",
+      }),
+    }),
+    getUserByEmail: builder.query({
+      query: (email: string) => ({
+        url: `user/getSingle/${email}`,
+        method: "GET",
       }),
     }),
     deactivateAccount: builder.mutation({
       query: (userInfo) => ({
-        url: "/api/auth/admin/block-user",
+        url: "auth/admin/block-user",
         method: "POST",
         body: userInfo,
       }),
     }),
     activeAccount: builder.mutation({
       query: (userInfo) => ({
-        url: "/api/auth/admin/make-active-user",
+        url: "auth/admin/make-active-user",
         method: "POST",
         body: userInfo,
       }),
     }),
     changeRole: builder.mutation({
       query: (userRole) => ({
-        url: "/api/auth/admin/change-user-role",
+        url: "auth/admin/change-user-role",
         method: "POST",
         body: userRole,
       }),
@@ -52,4 +61,5 @@ export const {
   useDeactivateAccountMutation,
   useActiveAccountMutation,
   useChangeRoleMutation,
+  useGetUserByEmailQuery,
 } = authApi;

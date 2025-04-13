@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,48 +10,85 @@ import { setUser, TUser } from "../../redux/features/auth/authSlice";
 
 
 
+type LoginResponse = {
+  success: boolean;
+  data: {
+    accessToken: string;
+  };
+};
+
+// ✅ Type for error response
+type ApiError = {
+  data?: {
+    message?: string;
+  };
+};
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
-
-   const {
+  const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
 
-
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      const user = verifyToken(token) as TUser;
+      if (user) {
+        toast.info("You are already logged in.");
+        if (user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/");
+        }
+      }
+    }
+  }, [navigate]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // console.log(data);
-    // const toastId = toast.loading("Please wait...");
+    const existingToken = localStorage.getItem("auth_token");
+    if (existingToken) {
+      const existingUser = verifyToken(existingToken) as TUser;
+      if (existingUser) {
+        toast.warning("You are already logged in!", { duration: 2000 });
+        if (existingUser.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/");
+        }
+        return;
+      }
+    }
+
     try {
-      const result = await login(data).unwrap();
-      console.log("Login : ", result);
+      const result = (await login(data).unwrap()) as LoginResponse;
 
       const user = verifyToken(result.data.accessToken) as TUser;
-      // console.log("user => ,", user);
-      if (result?.success) {
-        toast.success("Login Successfully..", {
-          // id: toastId,
-          duration: 2000,
-        });
-      }
-      dispatch(setUser({ user: user, token: result.data.accessToken }));
-      navigate("/");
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error:any) {
-      console.log("error =>", error);
-      toast.error(error.data.message, { duration: 2000 });
+      if (result?.success) {
+        toast.success("Login successful!", { duration: 2000 });
+      }
+
+      dispatch(setUser({ user, token: result.data.accessToken }));
+      localStorage.setItem("auth_token", result.data.accessToken);
+
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      toast.error(error?.data?.message || "Login failed", { duration: 2000 });
     }
   };
 
@@ -73,21 +109,22 @@ const Login = () => {
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    value:
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     message: "Invalid email address",
                   },
                 })}
                 type="email"
                 placeholder="Enter your email..."
-                className={`w-full px-4 py-2  text-white rounded-lg border ${
-                  errors.email
-                    ? "border-orange-500 focus:ring-orange-500"
-                    : "border-gray-700 focus:ring-gray-500"
-                } focus:outline-gray-500 focus:ring-2`}
+                className={`w-full px-4 py-2 text-white rounded-lg border ${errors.email
+                  ? "border-orange-500 focus:ring-orange-500"
+                  : "border-gray-700 focus:ring-gray-500"
+                  } focus:outline-gray-500 focus:ring-2`}
               />
-              {errors.email && (
-                <p className="text-orange-500 text-sm mt-1">Email is required</p>
+              {typeof errors.email?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.email.message}</p>
               )}
+
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -98,11 +135,10 @@ const Login = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password..."
-                  className={`w-full px-4 py-2  text-white rounded-lg border ${
-                    errors.password
-                      ? "border-orange-500 focus:ring-orange-500"
-                      : "border-gray-700 focus:ring-gray-500"
-                  } focus:outline-none focus:ring-2`}
+                  className={`w-full px-4 py-2 text-white rounded-lg border ${errors.password
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
+                    } focus:outline-none focus:ring-2`}
                 />
                 <button
                   type="button"
@@ -116,10 +152,8 @@ const Login = () => {
                   )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-orange-500 text-sm mt-1">
-                  Password is required
-                </p>
+              {typeof errors.password?.message === "string" && (
+                <p className="text-orange-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
           </div>
