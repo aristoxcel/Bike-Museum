@@ -88,7 +88,7 @@ const CreateProductForm = () => {
   };
 
   return (
-    <div className="container bg-orange-400 mx-auto p-20">
+    <div className="container  mx-auto p-20">
       <h1 className="text-2xl font-bold mb-4">Create New Product</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}

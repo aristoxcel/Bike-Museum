@@ -16,6 +16,12 @@ import {
 import { TOrder } from "../../redux/types/order";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { persistor } from "../../redux/store";
+import {
+  useDeactivateAccountMutation,
+  useActiveAccountMutation,
+  useChangeRoleMutation,
+} from "../../redux/features/auth/authApi";
+import { IUser } from "../../redux/types/user";
 
 const AdminDashboard = () => {
   const dispatch = useAppDispatch();
@@ -31,11 +37,16 @@ const AdminDashboard = () => {
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
   console.log(user);
 
-  const { data: usersData } = useGetAllUserDataQuery(skipToken);
+  const { data: usersData } = useGetAllUserDataQuery({});
   const { data: orderData, isLoading: ordersLoading } =
     useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
   const { data: productData, isLoading: productsLoading } =
     useGetAllProductsQuery({});
+  const [deactivateAccount] = useDeactivateAccountMutation();
+  const [activeAccount] = useActiveAccountMutation();
+  const [changeRole] = useChangeRoleMutation();
+  console.log(usersData)
+
 
   // ✅ Call delete mutation hook before any return
   const [deleteProduct] = useDeleteProductMutation();
@@ -60,6 +71,37 @@ const AdminDashboard = () => {
       toast.error("Failed to delete product");
     }
   };
+
+  const handleDeactivate = async (email: string) => {
+    try {
+      await deactivateAccount({ email }).unwrap();
+      toast.success("User deactivated successfully");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to deactivate user");
+    }
+  };
+
+  const handleActivate = async (email: string) => {
+    try {
+      await activeAccount({ email }).unwrap();
+      toast.success("User activated successfully");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to activate user");
+    }
+  };
+
+  const handleChangeRole = async (email: string, role: string) => {
+    try {
+      await changeRole({ email, role }).unwrap();
+      toast.success("User role updated");
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed to update role");
+    }
+  };
+
 
   if (ordersLoading || productsLoading || userLoading) {
     return (
@@ -215,7 +257,12 @@ const AdminDashboard = () => {
             </motion.div>
 
             {/* Orders Table */}
-            <div className="overflow-x-auto">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mt-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Orders</h3>
               <table className="w-full">
                 <thead className="bg-[#3A2E42]">
                   <tr>
@@ -240,7 +287,79 @@ const AdminDashboard = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </motion.div>
+            {/* Users Table */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-[#3A2E42] p-4 rounded-lg mb-8"
+            >
+              <h3 className="text-xl font-bold mb-4">Manage Users</h3>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#2B1E36]">
+                    <tr>
+                      <th className="p-3 text-left">Name</th>
+                      <th className="p-3 text-left">Email</th>
+                      <th className="p-3 text-left">Role</th>
+                      <th className="p-3 text-left">Status</th>
+                      <th className="p-3 text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersData?.data?.map((user: IUser) => (
+                      <tr key={user._id}>
+                        <td className="p-3">{user.name}</td>
+                        <td className="p-3">{user.email}</td>
+                        <td className="p-3 capitalize">{user.role}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2 py-1 rounded-full ${user.status === "active"
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-red-500/20 text-red-400"
+                              }`}
+                          >
+                            {user.status}
+                          </span>
+                        </td>
+                        <td className="p-3 flex gap-2 flex-wrap">
+                          {user.status === "active" ? (
+                            <button
+                              onClick={() => handleDeactivate(user.email)}
+                              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                              Deactivate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleActivate(user.email)}
+                              className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                            >
+                              Activate
+                            </button>
+                          )}
+                          <button
+                            onClick={() =>
+                              handleChangeRole(
+                                user.email,
+                                user.role === "admin" ? "user" : "admin"
+                              )
+                            }
+                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                          >
+                            Make {user.role === "admin" ? "User" : "Admin"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+
+
           </motion.main>
         </div>
       </div>
