@@ -4,39 +4,46 @@ import { toast } from "sonner";
 import { RingLoader } from "react-spinners";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";
-import { useGetUserOrdersDataQuery } from "../../redux/features/orders/orderApi";
+import { useGetUserOrdersDataMutation } from "../../redux/features/orders/orderApi";
 import { TOrder } from "../../redux/types/order";
 import { useGetUserByEmailQuery } from "../../redux/features/auth/authApi";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { useEffect } from "react";
 
 const UserDashboard = () => {
   const currentUser = useAppSelector(useCurrentUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  console.log(currentUser)
   const {
-    data: userResponse,
+    data: user,
     isLoading: userLoading,
     error: userError,
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
-
-  const user = userResponse?.data;
-  console.log("currentUser from redux:", currentUser);
-  console.log("user fetched from API:", user);
-
-  const {
-    data: ordersResponse,
-    isLoading: ordersLoading,
-    error: ordersError,
-  } = useGetUserOrdersDataQuery(user?.email ?? skipToken);
+  console.log(user)
+  const [getUserOrders, { data, isLoading: ordersLoading, error: ordersError }] =
+    useGetUserOrdersDataMutation();
+  useEffect(() => {
+    if (user?.data?._id) {
+      console.log("Fetching orders for user:", user.data._id);
+      getUserOrders(user.data._id)
+        .unwrap()
+        .then((res) => {
+          console.log("Orders fetched successfully:", res);
+        })
+        .catch((err) => {
+          console.error("Error fetching orders:", err);
+        });
+    }
+  }, [user?.data?._id, getUserOrders]);
 
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logout Successfully");
     navigate("/");
   };
-  console.log('order data nai', ordersResponse?.data)
 
+  // If either user or orders are loading, show loading spinner
   if (userLoading || ordersLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen px-4">
@@ -45,24 +52,25 @@ const UserDashboard = () => {
     );
   }
 
+  // If there's an error while fetching user or orders, show a message
   if (userError || ordersError) {
     toast.error("Failed to fetch data. Please try again later.");
     return null;
   }
 
-  if (!user || !user.email) {
-    console.warn("User email is missing:", user);
+  // Check if user data or email is missing
+  if (!user?.data?.email) {
     toast.error("User email is missing!");
     return null;
   }
 
-  const orderData = ordersResponse?.data || [];
-  
+  const orderData = data?.data || [];
+  const priceData = orderData.map((item: TOrder) => Number(item?.product?.price));
   const totalPrice =
-    orderData.reduce((sum: number, order: TOrder) => sum + Number(order?.product?.price || 0), 0) || 0;
+    priceData?.reduce((sum: number, price: number) => sum + price, 0) || 0;
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] text-white">
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <motion.aside
@@ -74,13 +82,13 @@ const UserDashboard = () => {
             <div className="text-center">
               <motion.img
                 whileHover={{ scale: 1.05 }}
-                src={user?.imageUrl || "/default-avatar.png"}
+                src={user?.data?.imageUrl || "/default-avatar.png"}
                 alt="User"
                 className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-400"
               />
-              <h2 className="text-xl font-bold mb-2">{user?.name || "User"}</h2>
-              <p className="text-sm text-gray-400">{user?.email}</p>
-              <p className="text-sm text-gray-400">Role : {user?.role || "N/A"}</p>
+              <h2 className="text-xl font-bold mb-2">{user?.data?.name || "User"}</h2>
+              <p className="text-sm text-gray-400">{user?.data?.email}</p>
+              <p className="text-sm text-gray-400">Role : {user?.data?.role || "N/A"}</p>
             </div>
 
             <div className="my-10 flex flex-col items-center justify-center gap-5">
@@ -123,14 +131,25 @@ const UserDashboard = () => {
                 <h3 className="text-gray-400">Active Orders</h3>
                 <p className="text-2xl font-bold">{orderData.length}</p>
                 <div className="h-1 bg-green-500 mt-2 rounded-full w-1/2" />
+                
               </motion.div>
             </div>
 
             <div className="overflow-x-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold">Order Summary</h1>
+                <Link
+                  to="/user/dashboard/edit-orders"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                  Edit Orders
+                </Link>
+              </div>
               <table className="w-full">
                 <thead className="bg-[#3A2E42]">
                   <tr>
                     <th className="p-3 text-left">Transaction ID</th>
+                    <th className="p-3 text-left">Name</th>
                     <th className="p-3 text-left">Brand</th>
                     <th className="p-3 text-left">Price</th>
                     <th className="p-3 text-left">Status</th>
@@ -140,11 +159,12 @@ const UserDashboard = () => {
                   {orderData.map((item: TOrder) => (
                     <tr key={item._id}>
                       <td className="p-3">{item._id}</td>
+                      <td className="p-3">{item.product?.name}</td>
                       <td className="p-3">{item.product?.brand}</td>
                       <td className="p-3">৳ {item.product?.price}</td>
                       <td className="p-3">
                         <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400">
-                          {item.orderStatus}
+                          {item.status}
                         </span>
                       </td>
                     </tr>

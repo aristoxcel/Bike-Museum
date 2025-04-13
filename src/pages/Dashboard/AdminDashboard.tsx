@@ -30,7 +30,7 @@ const AdminDashboard = () => {
   const currentUser = useAppSelector(useCurrentUser);
   console.log(currentUser);
 
-  // ✅ Get full admin info by email
+  
   const {
     data: user,
     isLoading: userLoading,
@@ -48,7 +48,6 @@ const AdminDashboard = () => {
   console.log(usersData)
 
 
-  // ✅ Call delete mutation hook before any return
   const [deleteProduct] = useDeleteProductMutation();
 
   const products = productData?.data || [];

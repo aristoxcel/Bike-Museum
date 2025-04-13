@@ -20,16 +20,14 @@ const orderApi = baseApi.injectEndpoints({
         },
       }),
     }),
-    getUserOrdersData: builder.query({
-      query: (userEmail) => ({
-        url: "/payment/get-user-order-data",
-        method: "PUT",
-        body: { email: userEmail }, // email sent as object
-        headers: {
-          "Content-Type": "application/json", // JSON data sender
-        },
+    getUserOrdersData: builder.mutation({
+      query: (userId) => ({
+        url: "/orders/get-user-order-data",
+        method: "POST",
+        body: { userId }, // 👈 make sure you're sending this
       }),
     }),
+    
 
     acceptOrder: builder.mutation({
       query: (bookInfo) => ({
@@ -46,19 +44,19 @@ const orderApi = baseApi.injectEndpoints({
       }),
     }),
     deleteOrder: builder.mutation({
-      query: (orderInfo) => ({
-        url: "/payment/delete-order",
-        method: "PUT",
-        body: orderInfo,
+      query: (orderId: string) => ({
+        url: `/orders/delete-order/${orderId}`,
+        method: "DELETE",
       }),
     }),
+    
   }),
 });
 
 export const {
   useAddOrderMutation,
   useGetAdminOrdersDataQuery,
-  useGetUserOrdersDataQuery,
+  useGetUserOrdersDataMutation,
   useAcceptOrderMutation,
   useCancelOrderMutation,
   useDeleteOrderMutation,
