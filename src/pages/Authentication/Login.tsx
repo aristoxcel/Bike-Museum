@@ -17,12 +17,6 @@ type LoginResponse = {
   };
 };
 
-// ✅ Type for error response
-// type ApiError = {
-//   data?: {
-//     message?: string;
-//   };
-// };
 
 
 const Login = () => {
