@@ -64,11 +64,7 @@ const OrderForm = () => {
     data.transactionId = Number(Date.now());
     data.product = id as string;
     data.user = user.data._id;
-<<<<<<< HEAD
-    console.log("order data:",data);
-=======
     data.totalPrice = productData?.data?.price || 0; 
->>>>>>> c73854907417b7745f670988832c226303e86e8e
 
     console.log("Submitting Order:", data);
 
