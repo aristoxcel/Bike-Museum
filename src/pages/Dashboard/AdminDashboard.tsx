@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   const { data: usersData } = useGetAllUserDataQuery({});
   const { data: orderData, isLoading: ordersLoading } =
     useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
-  const { data: productData, isLoading: productsLoading } =
+  const { data: productData, isLoading: productsLoading, refetch } =
     useGetAllProductsQuery({});
   const [deactivateAccount] = useDeactivateAccountMutation();
   const [activeAccount] = useActiveAccountMutation();
@@ -61,10 +61,14 @@ const AdminDashboard = () => {
     navigate("/login");
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string) => { 
     try {
+      
       await deleteProduct(id).unwrap();
       toast.success("Product deleted successfully");
+
+      refetch()
+      
     } catch (err) {
       console.error(err);
       toast.error("Failed to delete product");
@@ -279,7 +283,7 @@ const AdminDashboard = () => {
                       <td className="p-3">৳ {item?.product?.price}</td>
                       <td className="p-3">
                         <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400">
-                          {item.orderStatus}
+                          {item.status}
                         </span>
                       </td>
                     </tr>
@@ -291,7 +295,7 @@ const AdminDashboard = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-[#3A2E42] p-4 rounded-lg mb-8"
+              className="bg-[#3A2E42] p-4 rounded-lg my-8"
             >
               <h3 className="text-xl font-bold mb-4">Manage Users</h3>
 

@@ -45,7 +45,7 @@ const CreateProductForm = () => {
     if (file) {
       const newFormData = new FormData();
       newFormData.append("file", file);
-      newFormData.append("upload_preset", "your-upload-preset"); 
+      newFormData.append("upload_preset", "rakib001"); 
 
       try {
         const response = await axios.post(
@@ -73,7 +73,7 @@ const CreateProductForm = () => {
     try {
       await createProduct(form as Partial<TProductResponse>).unwrap();
       toast.success("Product created successfully");
-      navigate("/admin/products");
+      navigate("/admin/dashboard");
     } catch (err) {
       console.log(err);
       toast.error("Failed to create product");
