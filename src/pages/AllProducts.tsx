@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import ProductCard from '../components/ProductCard';
 import { useGetAllProductsQuery } from '../redux/features/products/productApi';
 import { TProduct } from '../redux/types/product';
+import { RingLoader } from 'react-spinners';
 
 const AllProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -121,7 +122,9 @@ const AllProducts = () => {
 
       {/* Product List */}
       {isLoading ? (
-        <div className="text-center">Loading...</div>
+             <div className="flex items-center justify-center min-h-screen  px-4">
+             <RingLoader size={80} color="#C2410C" />
+           </div>
       ) : error ? (
         <div className="text-red-500">Error fetching products.</div>
       ) : (
