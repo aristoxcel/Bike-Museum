@@ -125,18 +125,18 @@ const UserDashboard = () => {
             <div className="overflow-x-auto">
               <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Order Summary</h1>
-                <Link
+                {/* <Link
                   to="/user/dashboard/edit-orders"
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                 >
                   Edit Orders
-                </Link>
+                </Link> */}
               </div>
               <table className="w-full">
                 <thead className="bg-[#3A2E42]">
                   <tr>
                     <th className="p-3 text-left">Transaction ID</th>
-                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Product Name</th>
                     <th className="p-3 text-left">Brand</th>
                     <th className="p-3 text-left">Price</th>
                     <th className="p-3 text-left">Status</th>
@@ -145,7 +145,7 @@ const UserDashboard = () => {
                 <tbody>
                   {orderData.map((item: TOrder) => (
                     <tr key={item._id}>
-                      <td className="p-3">{item._id}</td>
+                      <td className="p-3">{item.transactionId}</td>
                       <td className="p-3">{item.product?.name}</td>
                       <td className="p-3">{item.product?.brand}</td>
                       <td className="p-3">৳ {item.product?.price}</td>
