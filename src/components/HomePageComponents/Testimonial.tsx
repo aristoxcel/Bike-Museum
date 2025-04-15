@@ -19,25 +19,25 @@ const clients: Client[] = [
   {
     name: "John Doe",
     img: "https://i.ibb.co/D7jMCQM/pic.jpg",
-    comment: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. At, debitis! Pariatur aliquam in totam doloribus quos possimus facilis quia ullam numquam eligendi reiciendis eaque cumque, sit culpa soluta. Quas, ad!",
+    comment: "The bike rides incredibly smooth even on rough terrains. The suspension is top-notch and the brakes are super responsive. Highly satisfied with the performance!",
   },
   {
     name: "Bran Chan",
     img: "https://i.ibb.co/Y2Dn0PB/pexels-chloekalaartist-1043471.jpg",
-    comment: "Cozy atmosphere, friendly staff, loved every bite. Highly recommend! s quos possimus facilis quia ullam numquam eligendi reiciendis eaque cumque, sit culpa",
+    comment: "Absolutely love this bike! Lightweight frame, stylish design, and great fuel efficiency. Perfect for daily commuting and weekend rides.",
   },
   {
     name: "Maria Kuri",
     img: "https://i.ibb.co/DKhsnBF/pexels-bertellifotografia-3764119.jpg",
-    comment: "Cozy atmosphere, friendly staff, loved every bite. Highly recommend! s quos possimus facilis quia ullam numquam eligendi reiciendis eaque cumque, sit culpa",
+    comment: "A beast on the highway! The engine power is impressive, and the handling feels super stable even at higher speeds. Would definitely recommend to bike enthusiasts.",
   },
   {
-    name: "Bran Chan",
+    name: "Alex Rider",
     img: "https://i.ibb.co/Y2Dn0PB/pexels-chloekalaartist-1043471.jpg",
-    comment: "Cozy atmosphere, friendly staff, loved every bite. Highly recommend! s quos possimus facilis quia ullam numquam eligendi reiciendis eaque cumque, sit culpa",
+    comment: "Great value for money. The bike has a comfortable seat, smooth gear shifts, and a sporty look that turns heads everywhere I go!",
   },
-  // Add more client objects here
 ];
+
 
 export default function Testimonial() {
   return (

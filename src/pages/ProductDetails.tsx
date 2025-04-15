@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useGetSingleProductQuery } from '../redux/features/products/productApi';
+import { RingLoader } from 'react-spinners';
 
 interface ProductError {
   data: {
@@ -24,7 +25,9 @@ const ProductDetails = () => {
   console.log("Error:", error);
 
   // Show loading state
-  if (isLoading) return <div className="flex justify-center items-center text-orange-400">Loading...</div>;
+  if (isLoading) return       <div className="flex items-center justify-center min-h-screen  px-4">
+  <RingLoader size={80} color="#C2410C" />
+</div>
 
   // Show error message if there is an issue fetching the product
   if (isError) {

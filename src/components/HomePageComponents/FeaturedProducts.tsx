@@ -3,6 +3,7 @@ import { Link} from 'react-router-dom';
 import { useGetAllProductsQuery } from '../../redux/features/products/productApi'; 
 import ProductCard from '../ProductCard'; 
 import { TProduct } from '../../redux/types/product';
+import { RingLoader } from 'react-spinners';
 
 const FeatureSection = () => {
   const [featuredProducts, setFeaturedProducts] = useState<TProduct[]>([]);
@@ -24,7 +25,9 @@ const FeatureSection = () => {
 
       {/* Check for loading or error */}
       {isLoading ? (
-        <div className="text-center text-orange-400">Loading...</div>
+              <div className="flex items-center justify-center min-h-screen  px-4">
+              <RingLoader size={80} color="#C2410C" />
+            </div>
       ) : error ? (
         <div className="text-red-500 text-center">Error fetching products.</div>
       ) : (
