@@ -39,7 +39,7 @@ export default function Home() {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-3xl md:text-5xl font-bold text-white"
+          className="text-3xl md:text-5xl font-bold text-orange-400"
         >
           Welcome to Bike Museum Family
         </motion.h1>
@@ -60,7 +60,7 @@ export default function Home() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-center mb-10 text-orange-500"
+          className="text-4xl font-bold text-center mb-10 text-orange-400"
         >
           Meet Our Team
         </motion.h2>
@@ -79,7 +79,7 @@ export default function Home() {
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-24 md:w-28 lg:w-36 h-24 md:h-28 lg:h-36 rounded-full mx-auto object-top border-2 border-white mb-4"
+                className="w-24 md:w-28 lg:w-36 h-24 md:h-28 lg:h-36  mx-auto object-top  mb-4"
               />
               <h3 className="text-xl font-semibold">{member.name}</h3>
               <p className="text-sm text-gray-300">{member.role}</p>
@@ -95,7 +95,7 @@ export default function Home() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-semibold text-center mb-10 text-orange-500"
+          className="text-4xl font-bold text-center mb-10 text-orange-400"
         >
           Contact Us
         </motion.h2>
@@ -120,7 +120,7 @@ export default function Home() {
           ></textarea>
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-700 transition-colors text-white px-6 py-3 rounded"
+            className="mt-2 px-3 py-1 border-4 text-lg border-orange-400 bg-orange-400  text-white hover:bg-transparent hover:text-orange-400 font-bold transition-colors duration-300"
           >
             Send Message
           </button>

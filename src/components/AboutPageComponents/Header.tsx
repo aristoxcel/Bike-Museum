@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ image, text }) => {
           backgroundImage: `url(${image})`,
         }}
       >
-        <h1 className="lg:text-7xl text-3xl md:text-4xl font-bold text-orange-600 underline">
+        <h1 className="lg:text-7xl text-3xl md:text-4xl font-bold text-white">
           {text}
         </h1>
       </div>
