@@ -35,10 +35,10 @@ const AdminDashboard = () => {
   } = useGetUserByEmailQuery(currentUser?.email ?? skipToken);
   console.log(user);
 
-  const { data: usersData } = useGetAllUserDataQuery({});
+  const { data: usersData, refetch: refetchUser } = useGetAllUserDataQuery({});
   const { data: orderData, isLoading: ordersLoading } =
     useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
-  const { data: productData, isLoading: productsLoading, refetch } =
+  const { data: productData, isLoading: productsLoading, refetch: refetchProduct } =
     useGetAllProductsQuery({});
   // const [deactivateAccount] = useDeactivateAccountMutation();
   // const [activeAccount] = useActiveAccountMutation();
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
       await deleteProduct(id).unwrap();
       toast.success("Product deleted successfully");
 
-      refetch()
+      refetchProduct()
       
     } catch (err) {
       console.error(err);
@@ -95,8 +95,10 @@ const AdminDashboard = () => {
 
   const handleChangeRole = async (id: string, role: 'admin' | 'user') => {
     try {
-      await changeRole({ id, role }).unwrap();  
+      await changeRole({ id, role }).unwrap(); 
+       
       toast.success("User role updated");
+      refetchUser()
     } catch (err) {
       console.log(err);
       toast.error("Failed to update role");
