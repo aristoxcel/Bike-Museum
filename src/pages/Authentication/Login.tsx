@@ -35,7 +35,7 @@ const Login = () => {
       const user = verifyToken(token) as TUser;
       if (user) {
         toast.info("You are already logged in.");
-        navigate("/"); // Redirect to home for all roles
+        navigate("/"); 
       }
     }
   }, [navigate]);
@@ -46,7 +46,7 @@ const Login = () => {
       const existingUser = verifyToken(existingToken) as TUser;
       if (existingUser) {
         toast.warning("You are already logged in!", { duration: 2000 });
-        navigate("/"); // Redirect to home for all roles
+        navigate("/"); 
         return;
       }
     }
@@ -62,12 +62,12 @@ const Login = () => {
       dispatch(setUser({ user, token: result.data.accessToken }));
       localStorage.setItem("auth_token", result.data.accessToken);
 
-      navigate("/"); // Redirect to home for all roles
+      navigate("/"); 
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Login failed", { duration: 2000 });
       } else {
-        toast.error("An unknown error occurred", { duration: 2000 });
+        toast.error("Login failed, wrong password or email", { duration: 2000 });
       }
     }
   };
