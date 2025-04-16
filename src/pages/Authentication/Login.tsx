@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,27 +29,20 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      const user = verifyToken(token) as TUser;
-      if (user) {
-        toast.info("You are already logged in.");
-        navigate("/"); 
-      }
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     const user = verifyToken(token) as TUser;
+  //     if (user) {
+  //       toast.info("You are already logged in.");
+  //       navigate("/"); 
+  //     }
+  //   }
+  // }, [navigate]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const existingToken = localStorage.getItem("auth_token");
-    if (existingToken) {
-      const existingUser = verifyToken(existingToken) as TUser;
-      if (existingUser) {
-        toast.warning("You are already logged in!", { duration: 2000 });
-        navigate("/"); 
-        return;
-      }
-    }
+    // const existingToken = localStorage.getItem("auth_token");
+    
 
     try {
       const result = (await login(data).unwrap()) as LoginResponse;
@@ -58,6 +51,7 @@ const Login = () => {
       if (result?.success) {
         toast.success("Login successful!", { duration: 2000 });
       }
+      
 
       dispatch(setUser({ user, token: result.data.accessToken }));
       localStorage.setItem("auth_token", result.data.accessToken);
