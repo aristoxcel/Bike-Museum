@@ -42,7 +42,14 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     // const existingToken = localStorage.getItem("auth_token");
-    
+    // if (existingToken) {
+    //   const existingUser = verifyToken(existingToken) as TUser;
+    //   if (existingUser) {
+    //     toast.warning("You are already logged in!", { duration: 2000 });
+    //     navigate("/"); 
+    //     return;
+    //   }
+    // }
 
     try {
       const result = (await login(data).unwrap()) as LoginResponse;

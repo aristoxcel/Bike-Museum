@@ -27,7 +27,7 @@ const Home = () => {
       <Banner />
 
       {/* Marquee with bike images */}
-      <div className="py-6 my-6">
+      <div className="py-6 my-20">
         <Marquee gradient={false} speed={40}>
           <img src={h1} alt="Bike 1" className="h-32 mx-4 rounded shadow-md" />
           <img src={h2} alt="Bike 2" className="h-32 mx-4 rounded shadow-md" />
@@ -45,7 +45,7 @@ const Home = () => {
       </div>
 
       {/* Special Services Section with larger text and image */}
-      <div className="bg-orange-50 ">
+      <div className="bg-orange-50 my-20">
       <div className="flex flex-col-1 lg:flex-row items-center justify-between px-10 py-26 gap-16 container mx-auto ">
         {/* Left Side - Large Text */}
         <div className="lg:w-1/2 text-center lg:text-left">
