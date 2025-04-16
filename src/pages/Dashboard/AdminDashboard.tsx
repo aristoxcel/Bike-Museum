@@ -17,8 +17,6 @@ import { TOrder } from "../../redux/types/order";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { persistor } from "../../redux/store";
 import {
-  useDeactivateAccountMutation,
-  useActiveAccountMutation,
   useChangeRoleMutation,
 } from "../../redux/features/auth/authApi";
 import { IUser } from "../../redux/types/user";
@@ -42,8 +40,8 @@ const AdminDashboard = () => {
     useGetAdminOrdersDataQuery(currentUser?.email ?? skipToken);
   const { data: productData, isLoading: productsLoading, refetch } =
     useGetAllProductsQuery({});
-  const [deactivateAccount] = useDeactivateAccountMutation();
-  const [activeAccount] = useActiveAccountMutation();
+  // const [deactivateAccount] = useDeactivateAccountMutation();
+  // const [activeAccount] = useActiveAccountMutation();
   const [changeRole] = useChangeRoleMutation();
   console.log(usersData)
 
@@ -75,35 +73,36 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeactivate = async (email: string) => {
-    try {
-      await deactivateAccount({ email }).unwrap();
-      toast.success("User deactivated successfully");
-    } catch (err) {
-      console.log(err)
-      toast.error("Failed to deactivate user");
-    }
-  };
+  // const handleDeactivate = async (email: string) => {
+  //   try {
+  //     await deactivateAccount({ email }).unwrap();
+  //     toast.success("User deactivated successfully");
+  //   } catch (err) {
+  //     console.log(err)
+  //     toast.error("Failed to deactivate user");
+  //   }
+  // };
 
-  const handleActivate = async (email: string) => {
-    try {
-      await activeAccount({ email }).unwrap();
-      toast.success("User activated successfully");
-    } catch (err) {
-      console.log(err)
-      toast.error("Failed to activate user");
-    }
-  };
+  // const handleActivate = async (email: string) => {
+  //   try {
+  //     await activeAccount({ email }).unwrap();
+  //     toast.success("User activated successfully");
+  //   } catch (err) {
+  //     console.log(err)
+  //     toast.error("Failed to activate user");
+  //   }
+  // };
 
-  const handleChangeRole = async (email: string, role: string) => {
+  const handleChangeRole = async (id: string, role: 'admin' | 'user') => {
     try {
-      await changeRole({ email, role }).unwrap();
+      await changeRole({ id, role }).unwrap();  
       toast.success("User role updated");
     } catch (err) {
-      console.log(err)
+      console.log(err);
       toast.error("Failed to update role");
     }
   };
+  
 
 
   if (ordersLoading || productsLoading || userLoading) {
@@ -327,7 +326,7 @@ const AdminDashboard = () => {
                           </span>
                         </td>
                         <td className="p-3 flex gap-2 flex-wrap">
-                          {user.status === "active" ? (
+                          {/* {user.status === "active" ? (
                             <button
                               onClick={() => handleDeactivate(user.email)}
                               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
@@ -341,11 +340,11 @@ const AdminDashboard = () => {
                             >
                               Activate
                             </button>
-                          )}
+                          )} */}
                           <button
                             onClick={() =>
                               handleChangeRole(
-                                user.email,
+                                user._id,
                                 user.role === "admin" ? "user" : "admin"
                               )
                             }
