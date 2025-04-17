@@ -70,7 +70,7 @@ const AllProducts = () => {
       {/* Filter Panel */}
       <div className="flex flex-wrap gap-4 mb-6">
         <input
-          className="input input-bordered text-orange-300 w-full max-w-xs"
+          className="input input-bordered text-orange-700 w-full max-w-xs"
           placeholder="Search by name/brand/category"
           value={searchTerm}
           onChange={(e) => {

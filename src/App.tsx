@@ -36,7 +36,7 @@ function App() {
   return (
     <>
       <div>
-        <div className="bg-gradient-to-b from-[#1f1c2c] via-[#2d1e40] to-[#0f0c29] fixed top-0 left-0 w-full min-h-screen -z-10"></div>
+        <div className="bg-white fixed top-0 left-0 w-full min-h-screen -z-10"></div>
 
         <div>
           <Navbar />

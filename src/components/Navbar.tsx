@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { logout, useCurrentUser } from '../redux/features/auth/authSlice';
 import { useGetUserByEmailQuery } from '../redux/features/auth/authApi';
+import { RingLoader } from 'react-spinners';
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,7 +25,9 @@ const Navbar = () => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         {/* You can place a spinner here */}
-        <span className="text-white">Loading...</span>
+        <div className="flex items-center justify-center min-h-screen  px-4">
+        <RingLoader size={80} color="#C2410C" />
+      </div>
       </div>
     );
   }

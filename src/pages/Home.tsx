@@ -16,6 +16,7 @@ import h10 from "../assets/images/h10.png";
 import h11 from "../assets/images/h11.png";
 import h12 from "../assets/images/h12.png";
 import explore from "../assets/images/explore.png"; // 
+import { Link } from "react-router-dom";
 
 
 
@@ -63,7 +64,7 @@ const Home = () => {
             type="submit"
             className="bg-orange-500 hover:bg-orange-700 font-semibold transition-colors text-white px-6 py-3 rounded"
           >
-            Book Now
+           <Link to="/products"> Book Now</Link>
           </button>
         </div>
 
