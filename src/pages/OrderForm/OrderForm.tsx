@@ -11,15 +11,13 @@ import { RingLoader } from "react-spinners";
 const OrderForm = () => {
   const { id } = useParams();
   const url = "https://bike-museum-server-tan.vercel.app/api";
-  
-  
   const currentUser = useAppSelector(useCurrentUser);
 
   const {
     data: productData,
     isLoading: productLoading,
     error: productError,
-  } = useGetSingleProductQuery(id as string); // ✅ Get product data
+  } = useGetSingleProductQuery(id as string); 
 
   const {
     data: user,
@@ -65,7 +63,7 @@ const OrderForm = () => {
     data.transactionId = Number(Date.now());
     data.product = id as string;
     data.user = user.data._id;
-    data.totalPrice = productData?.data?.price || 0; // ✅ Add totalPrice
+    data.totalPrice = productData?.data?.price || 0; 
 
     console.log("Submitting Order:", data);
 
@@ -91,7 +89,7 @@ const OrderForm = () => {
   return (
     <div className="w-10/12 mx-auto my-10 bg-four py-10 text-white">
       <div className="md:w-2/5 mx-auto">
-        {/* ✅ Show product info */}
+        {/* Show product info */}
         {productLoading ? (
           <RingLoader size={80} color="#C2410C" />
         ) : productError ? (

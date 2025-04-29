@@ -8,7 +8,6 @@ import axios from "axios";
 const CreateProductForm = () => {
   const navigate = useNavigate();
 
-  // Initialize form state
   const [form, setForm] = useState({
     name: "",
     brand: "",
@@ -21,10 +20,8 @@ const CreateProductForm = () => {
     isDeleted: false,
   });
 
-  // Create Product mutation
   const [createProduct] = useAddProductMutation();
 
-  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -43,13 +40,12 @@ const CreateProductForm = () => {
     }
   };
 
-  // Handle image file upload
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const newFormData = new FormData();
       newFormData.append("file", file);
-      newFormData.append("upload_preset", "your-upload-preset"); // Use your Cloudinary preset
+      newFormData.append("upload_preset", "your-upload-preset"); 
 
       try {
         const response = await axios.post(
@@ -62,7 +58,6 @@ const CreateProductForm = () => {
           }
         );
 
-        // Set the uploaded image URL in form state
         setForm({ ...form, photo: response.data.secure_url });
         toast.success("Image uploaded successfully");
       } catch (err) {
@@ -72,12 +67,10 @@ const CreateProductForm = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      // Use Partial<TProductResponse> to allow missing fields
       await createProduct(form as Partial<TProductResponse>).unwrap();
       toast.success("Product created successfully");
       navigate("/admin/products");

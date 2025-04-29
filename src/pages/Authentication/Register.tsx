@@ -36,7 +36,6 @@ const Register = () => {
     try {
       setLoading(true);
 
-      // Upload image to Cloudinary
       const image = data.image[0];
       const newFormData = new FormData();
       newFormData.append("file", image);
@@ -54,7 +53,6 @@ const Register = () => {
 
       const imageUrl = response.data.secure_url || response.data.url;
 
-      // Prepare final user object
       const { name, email, password, role } = data;
       const userInfo = {
         name,

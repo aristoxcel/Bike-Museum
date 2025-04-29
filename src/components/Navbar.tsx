@@ -50,48 +50,44 @@ const Navbar = () => {
         </li>
       </ul>
 
-      {/* User Avatar & Dropdown Menu */}
       <div className="flex gap-4 relative">
-        {currentUser && user && (
-          <div className="relative">
-            {/* Avatar */}
-            <div
-              className="rounded-full overflow-hidden cursor-pointer"
-              onClick={toggleDropdown}
-              aria-label="User Menu"
-            >
-              <img
-                src={user?.data?.imageUrl || '/default-avatar.png'} // Default fallback if no image
-                alt="User Avatar"
-                className="w-[40px] h-[40px] rounded-full"
-              />
-            </div>
-
-            {/* Dropdown */}
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 text-white bg-gradient-to-b from-orange-500 to-orange-700 border border-orange-400 rounded-lg shadow-lg z-50">
-                <ul className="py-1">
-                  <li>
-                    <Link
-                      to={`/${user?.data?.role}/dashboard`}
-                      className="block w-full text-left px-4 py-2 hover:bg-gradient-to-b from-orange-700 to-orange-500"
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 hover:bg-gradient-to-r from-orange-500 to-orange-700"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
+        <div className="relative">
+          <div
+            className="rounded-full overflow-hidden cursor-pointer"
+            onClick={toggleDropdown}
+            aria-label="User Menu"
+          >
+            <img
+              src={user?.data?.imageUrl || '/default.jpg'}
+              alt="User Avatar"
+              className="w-[40px] h-[40px] rounded-full"
+            />
           </div>
-        )}
+
+          {currentUser && user && isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 text-white bg-gradient-to-b from-orange-500 to-orange-700 border border-orange-400 rounded-lg shadow-lg z-50">
+              <ul className="py-1">
+                <li>
+                  <Link
+                    to={`/${user?.data?.role}/dashboard`}
+                    className="block w-full text-left px-4 py-2 hover:bg-gradient-to-b from-orange-700 to-orange-500"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 hover:bg-gradient-to-r from-orange-500 to-orange-700"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+
 
         {!currentUser && (
           <Link to="/login" className="border px-4 py-1 rounded text-white hover:bg-orange-600">

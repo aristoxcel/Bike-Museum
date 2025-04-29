@@ -5,7 +5,7 @@ import { RootState } from '../store'; // adjust path if needed
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://bike-museum-server-tan.vercel.app/api', // or use env variables for production
+    baseUrl: 'https://bike-museum-server-tan.vercel.app/api', 
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
