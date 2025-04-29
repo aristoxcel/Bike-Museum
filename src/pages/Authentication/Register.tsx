@@ -7,7 +7,6 @@ import { RingLoader } from "react-spinners";
 import axios from "axios";
 import { useRegisterMutation } from "../../redux/features/auth/authApi";
 
-
 type ApiError = {
   status?: number;
   data?: {
@@ -15,7 +14,6 @@ type ApiError = {
     error?: string;
   };
 };
-
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -53,23 +51,22 @@ const Register = () => {
 
       const imageUrl = response.data.secure_url || response.data.url;
 
-      const { name, email, password, role } = data;
+      const { name, email, password } = data;
       const userInfo = {
         name,
         email,
         password,
-        role,
+        role: "user", // Role fixed to "user"
         imageUrl,
       };
       console.log("Registering user with:", userInfo);
-
 
       const result = await registerUser(userInfo).unwrap();
 
       if (result?.success) {
         toast.success("Registration Successful!", { duration: 2000 });
         reset();
-        navigate("/login");
+        navigate("/login"); // keep this unchanged
       }
     } catch (err: unknown) {
       const error = err as ApiError;
@@ -91,8 +88,6 @@ const Register = () => {
       </div>
     );
   }
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] px-4">
@@ -118,7 +113,7 @@ const Register = () => {
                 <p className="text-orange-500 text-sm mt-1">{errors.name.message}</p>
               )}
             </div>
-  
+
             <div>
               <label className="block text-sm font-medium mb-2">Email Address</label>
               <input
@@ -140,7 +135,7 @@ const Register = () => {
                 <p className="text-orange-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
-  
+
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
               <div className="relative">
@@ -167,7 +162,7 @@ const Register = () => {
                 <p className="text-orange-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
-  
+
             <div>
               <label className="block text-sm font-medium mb-2">Image</label>
               <input
@@ -184,25 +179,7 @@ const Register = () => {
               )}
             </div>
           </div>
-  
-          <div>
-            <label className="block text-sm font-medium mb-2">Role</label>
-            <select
-              {...register("role", { required: "Role is required" })}
-              className={`w-full px-4 py-2 text-white bg-transparent rounded-lg border ${errors.role
-                ? "border-orange-500 focus:ring-orange-500"
-                : "border-gray-700 focus:ring-gray-500"
-              } focus:outline-none focus:ring-2`}
-            >
-              <option className="text-black font-semibold bg-orange-400" value="">Select role</option>
-              <option className="text-black font-semibold bg-orange-400" value="user">User</option>
-              <option className="text-black font-semibold bg-orange-400" value="admin">Admin</option>
-            </select>
-            {typeof errors.role?.message === "string" && (
-              <p className="text-orange-500 text-sm mt-1">{errors.role.message}</p>
-            )}
-          </div>
-  
+
           <button
             type="submit"
             className="w-full px-4 py-2 text-sm text-white font-medium border border-orange-500 rounded-lg bg-[linear-gradient(105deg,_#f97316_4.1%,_#ea580c_54.8%,_#c2410c_92.38%)] flex items-center justify-center"
@@ -210,7 +187,7 @@ const Register = () => {
             Register
           </button>
         </form>
-  
+
         <p className="text-center text-gray-400 mt-6">
           Already have an account?{" "}
           <Link to={"/login"} className="text-orange-500 hover:underline">
@@ -220,7 +197,6 @@ const Register = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Register;

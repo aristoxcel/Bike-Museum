@@ -8,16 +8,12 @@ import { useAppDispatch } from "../../redux/hooks";
 import { verifyToken } from "../../redux/utils/verifyToken";
 import { setUser, TUser } from "../../redux/features/auth/authSlice";
 
-
-
 type LoginResponse = {
   success: boolean;
   data: {
     accessToken: string;
   };
 };
-
-
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,11 +35,7 @@ const Login = () => {
       const user = verifyToken(token) as TUser;
       if (user) {
         toast.info("You are already logged in.");
-        if (user.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/");
-        }
+        navigate("/"); 
       }
     }
   }, [navigate]);
@@ -54,41 +46,31 @@ const Login = () => {
       const existingUser = verifyToken(existingToken) as TUser;
       if (existingUser) {
         toast.warning("You are already logged in!", { duration: 2000 });
-        if (existingUser.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/");
-        }
+        navigate("/"); 
         return;
       }
     }
-  
+
     try {
       const result = (await login(data).unwrap()) as LoginResponse;
-  
       const user = verifyToken(result.data.accessToken) as TUser;
-  
+
       if (result?.success) {
         toast.success("Login successful!", { duration: 2000 });
       }
-  
+
       dispatch(setUser({ user, token: result.data.accessToken }));
       localStorage.setItem("auth_token", result.data.accessToken);
-  
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
+
+      navigate("/"); 
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Login failed", { duration: 2000 });
       } else {
-        toast.error("An unknown error occurred", { duration: 2000 });
+        toast.error("Login failed, wrong password or email", { duration: 2000 });
       }
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1B1B31] via-[#2B1E36] to-[#1B1B31] px-4">
@@ -107,25 +89,28 @@ const Login = () => {
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
-                    value:
-                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     message: "Invalid email address",
                   },
                 })}
                 type="email"
                 placeholder="Enter your email..."
-                className={`w-full px-4 py-2 text-white rounded-lg border ${errors.email
-                  ? "border-orange-500 focus:ring-orange-500"
-                  : "border-gray-700 focus:ring-gray-500"
-                  } focus:outline-gray-500 focus:ring-2`}
+                className={`w-full px-4 py-2 text-white rounded-lg border ${
+                  errors.email
+                    ? "border-orange-500 focus:ring-orange-500"
+                    : "border-gray-700 focus:ring-gray-500"
+                } focus:outline-gray-500 focus:ring-2`}
               />
               {typeof errors.email?.message === "string" && (
-                <p className="text-orange-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-orange-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
               )}
-
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Password</label>
+              <label className="block text-sm font-medium mb-2">
+                Password
+              </label>
               <div className="relative">
                 <input
                   {...register("password", {
@@ -133,10 +118,11 @@ const Login = () => {
                   })}
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password..."
-                  className={`w-full px-4 py-2 text-white rounded-lg border ${errors.password
-                    ? "border-orange-500 focus:ring-orange-500"
-                    : "border-gray-700 focus:ring-gray-500"
-                    } focus:outline-none focus:ring-2`}
+                  className={`w-full px-4 py-2 text-white rounded-lg border ${
+                    errors.password
+                      ? "border-orange-500 focus:ring-orange-500"
+                      : "border-gray-700 focus:ring-gray-500"
+                  } focus:outline-none focus:ring-2`}
                 />
                 <button
                   type="button"
@@ -151,7 +137,9 @@ const Login = () => {
                 </button>
               </div>
               {typeof errors.password?.message === "string" && (
-                <p className="text-orange-500 text-sm mt-1">{errors.password.message}</p>
+                <p className="text-orange-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
               )}
             </div>
           </div>
